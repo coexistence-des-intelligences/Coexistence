@@ -34,7 +34,7 @@ La personne doit pouvoir lire le texte et penser immédiatement :
 
 RÈGLES
 - Écris en français simple, naturel et fluide.
-- Utilise de préférence la première personne : « Je pense… », « Je crains… », « Je me demande… ».
+- Écris la synthèse à la première personne : « Je pense… », « Je crains… », « Je me demande… », sauf si cela déformerait manifestement la manière dont la personne s’exprime.
 - Produis un petit texte continu de 3 à 6 phrases maximum.
 - Ne présente PAS la synthèse sous forme de catégories telles que « vécu », « hypothèse », « opinion », « valeur », « objection » ou « proposition ».
 - Ne transforme pas la parole de la personne en langage académique, philosophique ou administratif.
