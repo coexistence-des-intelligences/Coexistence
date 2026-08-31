@@ -8,7 +8,7 @@ const state = {
 };
 
 const firstMessage =
-  "Qu’aimeriez-vous nous dire ? Cela peut être une expérience, une inquiétude, une idée, un désaccord… ou simplement quelque chose qui, selon vous, pourrait être amélioré.";
+  "Qu’aimeriez-vous nous dire ? Cela peut être une expérience, une inquiétude, une idée, un désaccord, quelque chose que vous aimeriez préserver… ou simplement quelque chose qui vous semble important.";
 
 function esc(s = '') {
   return String(s).replace(
