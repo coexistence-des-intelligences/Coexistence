@@ -1,0 +1,15 @@
+{
+  "name": "coexistence-des-intelligences",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "check": "node --check src/worker.js && node --check src/openai.js && node --check src/supabase.js && node --check src/security.js && node --check src/collective.js && node --check public/app.js",
+    "smoke": "node tests/smoke-test.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
