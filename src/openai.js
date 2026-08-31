@@ -57,9 +57,15 @@ async function openAIJson(env, { instructions, input, schema, name, model, maxOu
       }
     }
   });
-  if (data?.status === 'incomplete') {
+ if (data?.status === 'incomplete') {
   throw new Error(
     `Réponse OpenAI incomplète : ${data?.incomplete_details?.reason || 'raison inconnue'}`
+  );
+}
+
+if (data?.status && data.status !== 'completed') {
+  throw new Error(
+    `Réponse OpenAI non terminée : statut ${data.status}`
   );
 }
 
@@ -100,7 +106,7 @@ export function analyzeCollectiveAI(env, instructions, payload) {
     input: JSON.stringify(payload),
     schema: collectiveSchema,
     name: 'collective_synthesis',
-    maxOutputTokens: 3400
+    maxOutputTokens: 7000
   });
 }
 
