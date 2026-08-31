@@ -32,7 +32,7 @@ async function sendMessage(){
 async function summarize(){
   if(state.busy)return; if(!state.messages.some(m=>m.role==='user')){setNotice('Dites d’abord quelque chose, même une seule phrase.');return;}
   setBusy(true,'Je prépare une synthèse fidèle…');
-  try{const data=await api('/api/summarize',{method:'POST',body:JSON.stringify({messages:state.messages.filter(m=>!m.content.startsWith('__thinking__'))})});setBusy(false);state.summary=data;$('#summary-title').value=data.title||'Contribution';$('#summary-text').value=data.summary||'';$('#nature-tags').innerHTML='';if(data.open_question){$('#open-question').textContent=data.open_question;$('#open-question-box').classList.remove('hidden');}else $('#open-question-box').classList.add('hidden');$('#confirm-share').checked=false;$('#include-conversation').checked=false;$('#summary-panel').classList.remove('hidden');$('#summary-panel').scrollIntoView({behavior:'smooth',block:'start'});}
+  try{const data=await api('/api/summarize',{method:'POST',body:JSON.stringify({messages:state.messages.filter(m=>!m.content.startsWith('__thinking__'))})});setBusy(false);state.summary=data;setNotice('');$('#summary-title').value=data.title||'Contribution';$('#summary-text').value=data.summary||'';$('#nature-tags').innerHTML='';if(data.open_question){$('#open-question').textContent=data.open_question;$('#open-question-box').classList.remove('hidden');}else $('#open-question-box').classList.add('hidden');$('#confirm-share').checked=false;$('#include-conversation').checked=false;$('#summary-panel').classList.remove('hidden');$('#summary-panel').scrollIntoView({behavior:'smooth',block:'start'});}
   catch(e){setBusy(false);setNotice(`<strong>Synthèse impossible.</strong> ${esc(e.message)}`,true);}
 }
 
