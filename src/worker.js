@@ -152,12 +152,25 @@ async function route(request, env, ctx) {
 
 export default {
   async fetch(request, env, ctx) {
-    try { return await route(request, env, ctx); }
-    catch (err) {
-      const status = Number(err.status || 500);
-      return json({ error: status === 500 ? 'Erreur interne.' : String(err.message || err) }, status);
-    }
-  },
+  try {
+    return await route(request, env, ctx);
+  } catch (err) {
+    const status = Number(err?.status || 500);
+
+    console.error(JSON.stringify({
+      type: 'worker_error',
+      path: new URL(request.url).pathname,
+      status,
+      message: String(err?.message || err),
+      stack: String(err?.stack || '').slice(0, 2000)
+    }));
+
+    return json(
+      { error: status === 500 ? 'Erreur interne.' : String(err?.message || err) },
+      status
+    );
+  }
+},
   async scheduled(controller, env, ctx) {
     if (controller.cron === '*/15 * * * *') {
       ctx.waitUntil(Promise.allSettled([retryPending(env), syncFederationPeers(env)]));
