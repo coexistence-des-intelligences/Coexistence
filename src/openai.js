@@ -57,8 +57,21 @@ async function openAIJson(env, { instructions, input, schema, name, model, maxOu
       }
     }
   });
-  const text = extractText(data);
+  if (data?.status === 'incomplete') {
+  throw new Error(
+    `Réponse OpenAI incomplète : ${data?.incomplete_details?.reason || 'raison inconnue'}`
+  );
+}
+
+const text = extractText(data);
+
+try {
   return JSON.parse(text);
+} catch (err) {
+  throw new Error(
+    `JSON OpenAI invalide : ${err.message}. Longueur reçue : ${text.length} caractères.`
+  );
+}
 }
 
 export function summarizeConversation(env, instructions, messages) {
@@ -77,7 +90,7 @@ export function analyzeContributionAI(env, instructions, payload) {
     input: JSON.stringify(payload),
     schema: analysisSchema,
     name: 'contribution_analysis',
-    maxOutputTokens: 2600
+    maxOutputTokens: 6000
   });
 }
 
