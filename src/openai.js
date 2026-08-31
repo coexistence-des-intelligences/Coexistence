@@ -67,7 +67,7 @@ export function summarizeConversation(env, instructions, messages) {
     input: (messages || []).slice(-30).map(m => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: String(m.content || '').slice(0, 12000) })),
     schema: summarySchema,
     name: 'contribution_summary',
-    maxOutputTokens: 900
+    maxOutputTokens: 3000
   });
 }
 
