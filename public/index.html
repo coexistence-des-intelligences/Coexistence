@@ -2,126 +2,767 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <meta name="description" content="Coexistence des intelligences — un espace collectif pour écouter, relier et confronter des expériences et idées différentes.">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  >
+
+  <meta
+    name="color-scheme"
+    content="light"
+  >
+
+  <meta
+    name="description"
+    content="Coexistence des intelligences — un espace collectif pour écouter, relier, confronter et faire évoluer des idées et expériences différentes."
+  >
+
   <title>Coexistence des intelligences</title>
-  <link rel="stylesheet" href="/styles.css">
+
+  <link
+    rel="stylesheet"
+    href="/styles.css"
+  >
 </head>
+
 <body>
+
   <header class="topbar">
-    <a class="brand" href="#home">Coexistence des intelligences</a>
+
+    <a
+      class="brand"
+      href="#home"
+    >
+      Coexistence des intelligences
+    </a>
+
     <nav aria-label="Navigation principale">
-      <button data-nav="home" class="nav active">Parler</button>
-      <button data-nav="understand" class="nav">Comprendre</button>
-      <button data-nav="disagreements" class="nav">Désaccords</button>
-      <button data-nav="evolution" class="nav">Évolution</button>
-      <button data-nav="journal" class="nav">Journal</button>
+
+      <button
+        data-nav="home"
+        class="nav active"
+      >
+        Parler
+      </button>
+
+      <button
+        data-nav="understand"
+        class="nav"
+      >
+        Comprendre
+      </button>
+
+      <button
+        data-nav="disagreements"
+        class="nav"
+      >
+        Désaccords
+      </button>
+
+      <button
+        data-nav="evolution"
+        class="nav"
+      >
+        Évolution
+      </button>
+
+      <button
+        data-nav="journal"
+        class="nav"
+      >
+        Journal
+      </button>
+
     </nav>
+
   </header>
 
+
   <main>
-    <section id="view-home" class="view active">
+
+    <!-- =========================================================
+         PARLER
+    ========================================================== -->
+
+    <section
+      id="view-home"
+      class="view active"
+    >
+
       <div class="hero shell">
-        <div class="eyebrow">UN PROJET COLLECTIF · AUCUNE LECTURE PRÉALABLE</div>
-        <h1>Et vous, qu’est-ce qui devrait changer&nbsp;?</h1>
-        <p class="lead">Une expérience, une inquiétude, une injustice, une idée ou simplement quelque chose qui pourrait être amélioré. Parlez comme vous parleriez normalement.</p>
-        <div class="trust-grid">
-          <div><strong>Quelques secondes suffisent.</strong><span>Vous choisissez la profondeur.</span></div>
-          <div><strong>Pas besoin d’être expert.</strong><span>Une expérience peut compter autant qu’une théorie.</span></div>
-          <div><strong>Rien n’est partagé sans vous.</strong><span>Vous relisez et validez la synthèse.</span></div>
+
+        <div class="eyebrow">
+          UN PROJET COLLECTIF · AUCUNE LECTURE PRÉALABLE
         </div>
+
+        <h1>
+          Et vous, qu’est-ce qui devrait changer&nbsp;?
+        </h1>
+
+        <p class="lead">
+          Une expérience, une inquiétude, une injustice,
+          une idée ou simplement quelque chose qui pourrait
+          être amélioré.
+          Parlez comme vous parleriez normalement.
+        </p>
+
+        <div class="trust-grid">
+
+          <div>
+            <strong>
+              Quelques secondes suffisent.
+            </strong>
+
+            <span>
+              Vous choisissez jusqu’où vous souhaitez aller.
+            </span>
+          </div>
+
+          <div>
+            <strong>
+              Pas besoin d’être expert.
+            </strong>
+
+            <span>
+              Une expérience, une intuition ou un désaccord
+              peut apporter quelque chose.
+            </span>
+          </div>
+
+          <div>
+            <strong>
+              Rien n’est partagé sans vous.
+            </strong>
+
+            <span>
+              Vous relisez et validez ce que vous souhaitez transmettre.
+            </span>
+          </div>
+
+        </div>
+
       </div>
+
 
       <div class="shell two-col">
+
         <section class="card chat-card">
-          <div id="chat" class="chat" aria-live="polite"></div>
+
+          <div
+            id="chat"
+            class="chat"
+            aria-live="polite"
+          ></div>
+
           <div class="composer">
-            <textarea id="message" rows="2" placeholder="Écrivez simplement ce que vous souhaitez dire…"></textarea>
-            <button id="mic" class="icon-btn mic hidden" aria-label="Dicter" title="Dicter">🎙️</button>
-            <button id="send" class="icon-btn" aria-label="Envoyer">➜</button>
+
+            <textarea
+              id="message"
+              rows="2"
+              placeholder="Écrivez simplement ce que vous souhaitez dire…"
+            ></textarea>
+
+            <button
+              id="mic"
+              class="icon-btn mic hidden"
+              aria-label="Dicter"
+              title="Dicter"
+            >
+              🎙️
+            </button>
+
+            <button
+              id="send"
+              class="icon-btn"
+              aria-label="Envoyer"
+            >
+              ➜
+            </button>
+
           </div>
+
+
           <div class="row wrap">
-            <button id="summarize" class="btn secondary">Synthétiser ce que j’ai dit</button>
-            <button id="reset" class="btn ghost">Recommencer</button>
+
+            <button
+              id="summarize"
+              class="btn secondary"
+            >
+              Synthétiser ce que j’ai dit
+            </button>
+
+            <button
+              id="reset"
+              class="btn ghost"
+            >
+              Recommencer
+            </button>
+
           </div>
-          <p class="hint">Évitez les noms complets, adresses, numéros ou informations personnelles inutiles.</p>
+
+
+          <p class="hint">
+            Évitez les noms complets, adresses, numéros
+            ou informations personnelles inutiles.
+          </p>
+
         </section>
 
+
         <aside class="card side-note">
-          <h2>Ce qui se passe derrière</h2>
+
+          <h2>
+            Comment ça fonctionne&nbsp;?
+          </h2>
+
           <ol>
-            <li>Vous parlez librement.</li>
-            <li>L’IA cherche d’abord à comprendre.</li>
-            <li>Vous corrigez sa synthèse.</li>
-            <li>Vous choisissez de partager ou non.</li>
-            <li>La contribution est reliée au corpus public.</li>
-            <li>Les désaccords et évolutions restent visibles.</li>
+
+            <li>
+              Vous parlez librement.
+            </li>
+
+            <li>
+              L’IA cherche d’abord à comprendre.
+            </li>
+
+            <li>
+              Vous pouvez lui demander une synthèse.
+            </li>
+
+            <li>
+              Vous la corrigez si nécessaire.
+            </li>
+
+            <li>
+              Vous choisissez de la partager ou non.
+            </li>
+
+            <li>
+              Si vous la partagez, elle rejoint le corpus
+              et peut être mise en relation avec d’autres contributions.
+            </li>
+
           </ol>
-          <p class="hint">Une critique du projet est une contribution possible. Le système doit protéger son fonctionnement, pas ses idées.</p>
+
+          <p class="hint">
+            L’IA peut proposer des interprétations,
+            des rapprochements ou des contre-arguments.
+            Ceux-ci restent contestables.
+          </p>
+
+          <p class="hint">
+            Une critique radicale du projet est une contribution possible.
+            Le système doit protéger son fonctionnement,
+            pas défendre ses propres idées.
+          </p>
+
         </aside>
+
       </div>
 
-      <section id="summary-panel" class="shell card summary-panel hidden">
-        <div class="eyebrow">PROPOSITION DE SYNTHÈSE · NON PARTAGÉE</div>
-        <h2>Est-ce bien ce que vous voulez transmettre&nbsp;?</h2>
-        <label>Titre<input id="summary-title" type="text"></label>
-        <label>Synthèse<textarea id="summary-text" rows="8"></textarea></label>
-        <div id="nature-tags" class="tags"></div>
-        <div id="open-question-box" class="open-question hidden"><strong>Question encore ouverte</strong><p id="open-question"></p></div>
-        <label class="check"><input id="confirm-share" type="checkbox"><span>J’ai relu cette synthèse et je souhaite la partager comme contribution.</span></label>
-        <label class="check"><input id="include-conversation" type="checkbox"><span>Je souhaite aussi transmettre la conversation complète <em>(facultatif, décoché par défaut)</em>.</span></label>
-        <div class="row wrap">
-          <button id="publish" class="btn primary">Valider ma contribution</button>
-          <button id="continue" class="btn ghost">Continuer la discussion</button>
-          <button id="discard" class="btn ghost">Ne rien partager</button>
+
+      <!-- =======================================================
+           SYNTHÈSE AVANT VALIDATION
+      ======================================================== -->
+
+      <section
+        id="summary-panel"
+        class="shell card summary-panel hidden"
+      >
+
+        <div class="eyebrow">
+          PROPOSITION DE SYNTHÈSE · NON PARTAGÉE
         </div>
+
+        <h2>
+          Est-ce bien ce que vous voulez transmettre&nbsp;?
+        </h2>
+
+        <p class="hint">
+          Cette synthèse est proposée par l’IA.
+          Vous pouvez la modifier librement avant toute publication.
+        </p>
+
+
+        <label>
+          Titre
+
+          <input
+            id="summary-title"
+            type="text"
+          >
+        </label>
+
+
+        <label>
+          Synthèse
+
+          <textarea
+            id="summary-text"
+            rows="8"
+          ></textarea>
+        </label>
+
+
+        <!--
+          Conservé pour compatibilité avec app.js.
+          Les catégories méthodologiques restent désormais invisibles.
+        -->
+        <div
+          id="nature-tags"
+          class="tags"
+        ></div>
+
+
+        <div
+          id="open-question-box"
+          class="open-question hidden"
+        >
+
+          <strong>
+            Question encore ouverte
+          </strong>
+
+          <p id="open-question"></p>
+
+        </div>
+
+
+        <label class="check">
+
+          <input
+            id="confirm-share"
+            type="checkbox"
+          >
+
+          <span>
+            J’ai relu cette synthèse et je souhaite
+            la partager comme contribution.
+          </span>
+
+        </label>
+
+
+        <label class="check">
+
+          <input
+            id="include-conversation"
+            type="checkbox"
+          >
+
+          <span>
+            Je souhaite aussi transmettre la conversation complète
+            <em>
+              (facultatif, décoché par défaut)
+            </em>.
+          </span>
+
+        </label>
+
+
+        <div class="row wrap">
+
+          <button
+            id="publish"
+            class="btn primary"
+          >
+            Valider ma contribution
+          </button>
+
+          <button
+            id="continue"
+            class="btn ghost"
+          >
+            Continuer la discussion
+          </button>
+
+          <button
+            id="discard"
+            class="btn ghost"
+          >
+            Ne rien partager
+          </button>
+
+        </div>
+
       </section>
-      <div id="notice" class="shell"></div>
+
+
+      <div
+        id="notice"
+        class="shell"
+      ></div>
+
     </section>
 
-    <section id="view-understand" class="view shell">
-      <div class="section-head"><div><div class="eyebrow">CORPUS VIVANT</div><h1>Ce que nous apprenons</h1></div><button class="btn ghost refresh">Actualiser</button></div>
-      <div id="stats" class="stats"></div>
-      <div class="grid-2">
-        <section class="card"><h2>Ce qui émerge</h2><div id="themes"></div></section>
-        <section class="card"><h2>Dernière synthèse collective</h2><div id="latest-synthesis"></div></section>
+
+    <!-- =========================================================
+         COMPRENDRE
+    ========================================================== -->
+
+    <section
+      id="view-understand"
+      class="view shell"
+    >
+
+      <div class="section-head">
+
+        <div>
+
+          <div class="eyebrow">
+            CORPUS VIVANT
+          </div>
+
+          <h1>
+            Ce qui se dessine
+          </h1>
+
+        </div>
+
+
+        <button
+          class="btn ghost refresh"
+        >
+          Actualiser
+        </button>
+
       </div>
-      <section class="card"><h2>Contributions publiques récentes</h2><div id="contributions"></div></section>
-    </section>
 
-    <section id="view-disagreements" class="view shell">
-      <div class="section-head"><div><div class="eyebrow">LE DÉSACCORD EST UNE INFORMATION</div><h1>Désaccords ouverts</h1></div><button class="btn ghost refresh">Actualiser</button></div>
-      <div id="disagreement-list" class="stack"></div>
-    </section>
 
-    <section id="view-evolution" class="view shell">
-      <div class="section-head"><div><div class="eyebrow">AUTO-AMÉLIORATION AUDITABLE</div><h1>Ce que le projet envisage de modifier</h1></div><button class="btn ghost refresh">Actualiser</button></div>
-      <p class="lead small-lead">Une proposition peut être produite automatiquement. Elle n’est jamais adoptée silencieusement. Les objections restent visibles.</p>
-      <div id="proposal-list" class="stack"></div>
+      <p class="lead small-lead">
+        Le corpus ne prétend pas dire ce que « tout le monde pense ».
+        Il permet d’observer des contributions,
+        des pistes, des tensions et des questions
+        à mesure qu’elles apparaissent.
+      </p>
+
+
+      <div
+        id="stats"
+        class="stats"
+      ></div>
+
+
       <div class="grid-2">
-        <section class="card"><h2>Risques ouverts</h2><div id="risk-list"></div></section>
-        <section class="card"><h2>Questions ouvertes</h2><div id="question-list"></div></section>
+
+        <section class="card">
+
+          <h2>
+            Pistes thématiques
+          </h2>
+
+          <p class="hint">
+            Ces thèmes servent à relier les contributions.
+            Leur présence ne signifie pas qu’ils constituent
+            une conclusion du projet.
+          </p>
+
+          <div id="themes"></div>
+
+        </section>
+
+
+        <section class="card">
+
+          <h2>
+            Dernière synthèse collective
+          </h2>
+
+          <p class="hint">
+            Une synthèse collective cherche à rendre visibles
+            les convergences et divergences du corpus.
+            Elle reste une interprétation contestable.
+          </p>
+
+          <div id="latest-synthesis"></div>
+
+        </section>
+
       </div>
+
+
+      <section class="card">
+
+        <h2>
+          Contributions publiques récentes
+        </h2>
+
+        <p class="hint">
+          Chaque contribution reste distincte de l’analyse
+          que l’IA peut ensuite en produire.
+        </p>
+
+        <div id="contributions"></div>
+
+      </section>
+
     </section>
 
-    <section id="view-journal" class="view shell">
-      <div class="section-head"><div><div class="eyebrow">IA ET SYSTÈME OBSERVABLES</div><h1>Journal public</h1></div><button class="btn ghost refresh">Actualiser</button></div>
-      <p class="lead small-lead">Chaque transformation institutionnelle importante doit laisser une trace. Les détails techniques sensibles ne sont pas publiés lorsqu’ils faciliteraient une attaque.</p>
-      <div id="event-list" class="timeline"></div>
-      <section class="card federation"><h2>Fédération</h2><p>Cette instance publie déjà un flux inter-instance en lecture seule. Les données distantes restent <strong>non vérifiées</strong> tant qu’un protocole de signature n’est pas activé.</p><div id="federation-list"></div></section>
+
+    <!-- =========================================================
+         DÉSACCORDS
+    ========================================================== -->
+
+    <section
+      id="view-disagreements"
+      class="view shell"
+    >
+
+      <div class="section-head">
+
+        <div>
+
+          <div class="eyebrow">
+            LE DÉSACCORD EST UNE INFORMATION
+          </div>
+
+          <h1>
+            Désaccords structurés
+          </h1>
+
+        </div>
+
+
+        <button
+          class="btn ghost refresh"
+        >
+          Actualiser
+        </button>
+
+      </div>
+
+
+      <p class="lead small-lead">
+        Un désaccord collectif n’apparaît que lorsque
+        plusieurs contributions portent réellement
+        des positions différentes.
+        Un contre-argument produit par l’IA
+        ne constitue pas à lui seul une seconde position.
+      </p>
+
+
+      <div
+        id="disagreement-list"
+        class="stack"
+      ></div>
+
     </section>
+
+
+    <!-- =========================================================
+         ÉVOLUTION
+    ========================================================== -->
+
+    <section
+      id="view-evolution"
+      class="view shell"
+    >
+
+      <div class="section-head">
+
+        <div>
+
+          <div class="eyebrow">
+            AUTO-AMÉLIORATION AUDITABLE
+          </div>
+
+          <h1>
+            Propositions d’évolution à examiner
+          </h1>
+
+        </div>
+
+
+        <button
+          class="btn ghost refresh"
+        >
+          Actualiser
+        </button>
+
+      </div>
+
+
+      <p class="lead small-lead">
+        Une proposition n’est jamais une décision automatique.
+        Elle doit rester reliée aux contributions qui l’ont fait émerger,
+        pouvoir rencontrer ses objections
+        et conserver les alternatives raisonnables.
+      </p>
+
+
+      <div
+        id="proposal-list"
+        class="stack"
+      ></div>
+
+
+      <div class="grid-2">
+
+        <section class="card">
+
+          <h2>
+            Risques à examiner
+          </h2>
+
+          <p class="hint">
+            Un risque peut être important même s’il est rarement signalé.
+            Sa présence ne signifie pas qu’il est établi comme certain.
+          </p>
+
+          <div id="risk-list"></div>
+
+        </section>
+
+
+        <section class="card">
+
+          <h2>
+            Questions collectives ouvertes
+          </h2>
+
+          <p class="hint">
+            Certaines questions peuvent rester ouvertes.
+            « Nous ne savons pas encore » est une réponse acceptable.
+          </p>
+
+          <div id="question-list"></div>
+
+        </section>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         JOURNAL
+    ========================================================== -->
+
+    <section
+      id="view-journal"
+      class="view shell"
+    >
+
+      <div class="section-head">
+
+        <div>
+
+          <div class="eyebrow">
+            IA ET SYSTÈME OBSERVABLES
+          </div>
+
+          <h1>
+            Journal public
+          </h1>
+
+        </div>
+
+
+        <button
+          class="btn ghost refresh"
+        >
+          Actualiser
+        </button>
+
+      </div>
+
+
+      <p class="lead small-lead">
+        Les transformations significatives du projet
+        doivent pouvoir laisser une trace :
+        publication, évolution méthodologique,
+        synthèse collective ou incident important.
+      </p>
+
+      <p class="hint">
+        Les détails techniques susceptibles de faciliter
+        une attaque ou d’exposer des informations sensibles
+        ne sont pas publiés.
+      </p>
+
+
+      <div
+        id="event-list"
+        class="timeline"
+      ></div>
+
+
+      <section class="card federation">
+
+        <h2>
+          Fédération
+        </h2>
+
+        <p>
+          Cette instance peut échanger des informations
+          avec d’autres instances autonomes du projet.
+        </p>
+
+        <p class="hint">
+          Les informations provenant d’autres instances
+          restent non vérifiées tant qu’un mécanisme
+          de signature et de confiance n’a pas été établi.
+          Recevoir une information ne signifie pas devoir l’adopter.
+        </p>
+
+
+        <div
+          id="federation-list"
+        ></div>
+
+      </section>
+
+    </section>
+
   </main>
 
+
+  <!-- ===========================================================
+       PIED DE PAGE
+  ============================================================ -->
+
   <footer class="footer shell">
-    <p><strong>Coexistence des intelligences</strong> — état initial ouvert. Ni l’initiateur, ni une majorité, ni l’IA ne sont une autorité morale finale.</p>
+
+    <p>
+      <strong>
+        Coexistence des intelligences
+      </strong>
+      — état initial ouvert.
+    </p>
+
+    <p>
+      Ni l’initiateur, ni une majorité,
+      ni une intelligence artificielle
+      ne constituent une autorité morale finale.
+    </p>
+
   </footer>
 
+
+  <!-- ===========================================================
+       DÉTAIL D’UNE CONTRIBUTION
+  ============================================================ -->
+
   <dialog id="detail-dialog">
-    <button id="close-dialog" class="dialog-close" aria-label="Fermer">×</button>
+
+    <button
+      id="close-dialog"
+      class="dialog-close"
+      aria-label="Fermer"
+    >
+      ×
+    </button>
+
     <div id="detail-content"></div>
+
   </dialog>
 
-  <script type="module" src="/app.js"></script>
+
+  <script
+    type="module"
+    src="/app.js"
+  ></script>
+
 </body>
 </html>
