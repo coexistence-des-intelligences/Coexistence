@@ -1,24 +1,32 @@
 {
-  "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "coexistence",
   "main": "src/worker.js",
   "compatibility_date": "2026-08-31",
+
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
     "run_worker_first": ["/api/*", "/.well-known/*"]
   },
+
   "triggers": {
-    "crons": ["*/15 * * * *", "17 */6 * * *"]
+    "crons": [
+      "*/15 * * * *",
+      "0 */6 * * *"
+    ]
   },
+
   "vars": {
     "INSTANCE_ID": "coexistence-origin-1",
-    "INSTANCE_NAME": "Coexistence des intelligences — instance d'origine",
+    "INSTANCE_NAME": "Coexistence des intelligences",
+
     "PROTOCOL_VERSION": "0.1",
-    "ANALYSIS_PROTOCOL_VERSION": "0.1",
+    "ANALYSIS_PROTOCOL_VERSION": "0.2",
+
     "OPENAI_CHAT_MODEL": "gpt-5-mini",
     "OPENAI_ANALYSIS_MODEL": "gpt-5-mini",
     "OPENAI_EMBEDDING_MODEL": "text-embedding-3-small",
+
     "PUBLIC_BASE_URL": ""
   }
 }
