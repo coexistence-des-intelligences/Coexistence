@@ -1,15 +1,37 @@
 import { summarySchema, analysisSchema, collectiveSchema } from './schemas.js';
 
 function extractText(data) {
-  if (typeof data?.output_text === 'string') return data.output_text;
+  if (
+    typeof data?.output_text === 'string' &&
+    data.output_text.length > 0
+  ) {
+    return data.output_text;
+  }
+
+  const chunks = [];
+
   for (const item of data?.output || []) {
-    if (item?.type === 'message') {
-      for (const c of item.content || []) {
-        if (c?.type === 'output_text' && typeof c.text === 'string') return c.text;
+    if (item?.type !== 'message') continue;
+
+    for (const content of item.content || []) {
+      if (
+        content?.type === 'output_text' &&
+        typeof content.text === 'string'
+      ) {
+        chunks.push(content.text);
       }
     }
   }
-  throw new Error('Aucun texte exploitable dans la réponse OpenAI.');
+
+  const text = chunks.join('');
+
+  if (text.length > 0) {
+    return text;
+  }
+
+  throw new Error(
+    'Aucun texte exploitable dans la réponse OpenAI.'
+  );
 }
 
 async function requestOpenAI(env, body) {
