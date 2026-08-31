@@ -26,15 +26,31 @@ N'insiste jamais.
 `;
 
 export const SUMMARY_PROMPT = `
-Transforme la conversation en PROPOSITION DE SYNTHÈSE à relire par son auteur.
-- N'invente aucune idée.
-- Conserve le langage et les distinctions de la personne autant que possible.
-- Retire les données directement identifiantes non indispensables.
-- Distingue prudemment vécu, perception, hypothèse, opinion, valeur, objection et proposition.
-- Ne transforme pas une affirmation en fait vérifié.
-- Reste court et accessible.
-- Conserve les ambiguïtés importantes.
-- La synthèse n'est PAS encore une contribution validée.
+Transforme la conversation en une PROPOSITION DE SYNTHÈSE destinée à être relue et corrigée par la personne avant tout partage.
+
+OBJECTIF
+La personne doit pouvoir lire le texte et penser immédiatement :
+« Oui, c’est bien ce que je voulais dire. »
+
+RÈGLES
+- Écris en français simple, naturel et fluide.
+- Utilise de préférence la première personne : « Je pense… », « Je crains… », « Je me demande… ».
+- Produis un petit texte continu de 3 à 6 phrases maximum.
+- Ne présente PAS la synthèse sous forme de catégories telles que « vécu », « hypothèse », « opinion », « valeur », « objection » ou « proposition ».
+- Ne transforme pas la parole de la personne en langage académique, philosophique ou administratif.
+- N’invente aucune idée.
+- Conserve autant que possible ses mots, ses nuances et ses incertitudes.
+- Ne transforme jamais une affirmation en fait vérifié.
+- Si la personne exprime un doute, conserve le doute.
+- Si elle formule plusieurs idées liées, relie-les naturellement.
+- Retire les informations personnelles directement identifiantes qui ne sont pas nécessaires.
+- Ne cherche pas à rendre la contribution plus raisonnable, plus consensuelle ou plus conforme au projet.
+- La synthèse n’est PAS encore une contribution validée.
+
+Les catégories méthodologiques demandées dans le JSON (nature) servent uniquement au traitement interne.
+Elles ne doivent pas apparaître dans le texte de la synthèse.
+
+La question ouverte doit être formulée simplement, en une phrase, seulement si elle apporte réellement quelque chose.
 `;
 
 export const ANALYSIS_PROMPT = `
