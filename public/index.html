@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
   <meta charset="utf-8">
 
@@ -26,7 +27,12 @@
   >
 </head>
 
+
 <body>
+
+  <!-- =========================================================
+       NAVIGATION
+  ========================================================== -->
 
   <header class="topbar">
 
@@ -36,6 +42,7 @@
     >
       Coexistence des intelligences
     </a>
+
 
     <nav aria-label="Navigation principale">
 
@@ -79,7 +86,9 @@
   </header>
 
 
+
   <main>
+
 
     <!-- =========================================================
          PARLER
@@ -96,20 +105,24 @@
           UN PROJET COLLECTIF · AUCUNE LECTURE PRÉALABLE
         </div>
 
+
         <h1>
-         Et vous, qu’est-ce qui vous semble important&nbsp;?
+          Et vous, qu’est-ce qui vous semble important&nbsp;?
         </h1>
 
-       <p class="lead">
-  Une expérience, une inquiétude, une idée, un désaccord,
-  quelque chose à préserver ou quelque chose qui pourrait
-  être amélioré.
-  Parlez comme vous parleriez normalement.
-</p>
+
+        <p class="lead">
+          Une expérience, une inquiétude, une idée, un désaccord,
+          quelque chose à préserver ou quelque chose qui pourrait
+          être amélioré.
+          Parlez comme vous parleriez normalement.
+        </p>
+
 
         <div class="trust-grid">
 
           <div>
+
             <strong>
               Quelques secondes suffisent.
             </strong>
@@ -117,9 +130,12 @@
             <span>
               Vous choisissez jusqu’où vous souhaitez aller.
             </span>
+
           </div>
 
+
           <div>
+
             <strong>
               Pas besoin d’être expert.
             </strong>
@@ -128,9 +144,12 @@
               Une expérience, une intuition ou un désaccord
               peut apporter quelque chose.
             </span>
+
           </div>
 
+
           <div>
+
             <strong>
               Rien n’est partagé sans vous.
             </strong>
@@ -138,11 +157,13 @@
             <span>
               Vous relisez et validez ce que vous souhaitez transmettre.
             </span>
+
           </div>
 
         </div>
 
       </div>
+
 
 
       <div class="shell two-col">
@@ -155,6 +176,7 @@
             aria-live="polite"
           ></div>
 
+
           <div class="composer">
 
             <textarea
@@ -162,6 +184,7 @@
               rows="2"
               placeholder="Écrivez simplement ce que vous souhaitez dire…"
             ></textarea>
+
 
             <button
               id="mic"
@@ -171,6 +194,7 @@
             >
               🎙️
             </button>
+
 
             <button
               id="send"
@@ -192,6 +216,7 @@
               Synthétiser ce que j’ai dit
             </button>
 
+
             <button
               id="reset"
               class="btn ghost"
@@ -210,11 +235,13 @@
         </section>
 
 
+
         <aside class="card side-note">
 
           <h2>
             Comment ça fonctionne&nbsp;?
           </h2>
+
 
           <ol>
 
@@ -245,11 +272,13 @@
 
           </ol>
 
+
           <p class="hint">
             L’IA peut proposer des interprétations,
             des rapprochements ou des contre-arguments.
             Ceux-ci restent contestables.
           </p>
+
 
           <p class="hint">
             Une critique radicale du projet est une contribution possible.
@@ -260,6 +289,7 @@
         </aside>
 
       </div>
+
 
 
       <!-- =======================================================
@@ -275,9 +305,11 @@
           PROPOSITION DE SYNTHÈSE · NON PARTAGÉE
         </div>
 
+
         <h2>
           Est-ce bien ce que vous voulez transmettre&nbsp;?
         </h2>
+
 
         <p class="hint">
           Cette synthèse est proposée par l’IA.
@@ -286,29 +318,34 @@
 
 
         <label>
+
           Titre
 
           <input
             id="summary-title"
             type="text"
           >
+
         </label>
 
 
         <label>
+
           Synthèse
 
           <textarea
             id="summary-text"
             rows="8"
           ></textarea>
+
         </label>
 
 
         <!--
           Conservé pour compatibilité avec app.js.
-          Les catégories méthodologiques restent désormais invisibles.
+          Les catégories méthodologiques restent invisibles.
         -->
+
         <div
           id="nature-tags"
           class="tags"
@@ -370,12 +407,14 @@
             Valider ma contribution
           </button>
 
+
           <button
             id="continue"
             class="btn ghost"
           >
             Continuer la discussion
           </button>
+
 
           <button
             id="discard"
@@ -395,6 +434,7 @@
       ></div>
 
     </section>
+
 
 
     <!-- =========================================================
@@ -438,10 +478,21 @@
       </p>
 
 
+      <p class="hint">
+        Les contributions sont anonymes.
+        Le système peut compter des contributions,
+        mais il ne sait pas actuellement combien de personnes
+        distinctes en sont à l’origine.
+        Une pluralité de contributions n’est donc pas automatiquement
+        une pluralité de contributeurs.
+      </p>
+
+
       <div
         id="stats"
         class="stats"
       ></div>
+
 
 
       <div class="grid-2">
@@ -452,28 +503,42 @@
             Pistes thématiques
           </h2>
 
+
           <p class="hint">
             Ces thèmes servent à relier les contributions.
             Leur présence ne signifie pas qu’ils constituent
-            une conclusion du projet.
+            une conclusion du projet ni qu’ils représentent
+            une fréquence parmi des personnes distinctes.
           </p>
+
 
           <div id="themes"></div>
 
         </section>
 
 
+
         <section class="card">
 
           <h2>
-            Dernière synthèse collective
+            Dernière synthèse inter-contributions
           </h2>
 
+
           <p class="hint">
-            Une synthèse collective cherche à rendre visibles
-            les convergences et divergences du corpus.
+            Une synthèse inter-contributions cherche à rendre visibles
+            les convergences, divergences et tensions entre plusieurs
+            éléments du corpus.
             Elle reste une interprétation contestable.
           </p>
+
+
+          <p class="hint">
+            Plusieurs contributions peuvent provenir d’une même personne.
+            Cette synthèse ne doit donc pas être interprétée
+            comme un sondage, un vote ou une représentation sociale.
+          </p>
+
 
           <div id="latest-synthesis"></div>
 
@@ -482,22 +547,28 @@
       </div>
 
 
+
       <section class="card">
 
         <h2>
           Contributions publiques récentes
         </h2>
 
+
         <p class="hint">
           Chaque contribution reste distincte de l’analyse
           que l’IA peut ensuite en produire.
+          Deux contributions différentes ne constituent pas
+          une preuve qu’elles proviennent de deux personnes différentes.
         </p>
+
 
         <div id="contributions"></div>
 
       </section>
 
     </section>
+
 
 
     <!-- =========================================================
@@ -517,8 +588,9 @@
             LE DÉSACCORD EST UNE INFORMATION
           </div>
 
+
           <h1>
-            Désaccords structurés
+            Désaccords entre contributions
           </h1>
 
         </div>
@@ -534,11 +606,18 @@
 
 
       <p class="lead small-lead">
-        Un désaccord collectif n’apparaît que lorsque
-        plusieurs contributions portent réellement
-        des positions différentes.
-        Un contre-argument produit par l’IA
-        ne constitue pas à lui seul une seconde position.
+        Un désaccord apparaît lorsque plusieurs contributions
+        portent réellement des positions différentes ou en tension.
+        Un contre-argument produit par l’IA ne constitue pas
+        à lui seul une seconde position du corpus.
+      </p>
+
+
+      <p class="hint">
+        Ces désaccords décrivent des relations entre des contributions
+        ou des positions exprimées.
+        Ils ne prouvent pas que plusieurs personnes distinctes
+        sont en désaccord.
       </p>
 
 
@@ -548,6 +627,7 @@
       ></div>
 
     </section>
+
 
 
     <!-- =========================================================
@@ -566,6 +646,7 @@
           <div class="eyebrow">
             AUTO-AMÉLIORATION AUDITABLE
           </div>
+
 
           <h1>
             Propositions d’évolution à examiner
@@ -591,10 +672,18 @@
       </p>
 
 
+      <p class="hint">
+        La répétition d’une proposition dans plusieurs contributions
+        ne constitue ni une majorité, ni un vote,
+        ni une preuve qu’elle est portée par plusieurs personnes distinctes.
+      </p>
+
+
       <div
         id="proposal-list"
         class="stack"
       ></div>
+
 
 
       <div class="grid-2">
@@ -602,29 +691,38 @@
         <section class="card">
 
           <h2>
-            Risques à examiner
+            Risques signalés
           </h2>
 
+
           <p class="hint">
-            Un risque peut être important même s’il est rarement signalé.
-            Sa présence ne signifie pas qu’il est établi comme certain.
+            Un risque peut être important même s’il n’apparaît
+            que dans une seule contribution.
+            Sa présence ne signifie pas qu’il est certain,
+            partagé ou représentatif.
           </p>
+
 
           <div id="risk-list"></div>
 
         </section>
 
 
+
         <section class="card">
 
           <h2>
-            Questions collectives ouvertes
+            Questions du corpus
           </h2>
+
 
           <p class="hint">
             Certaines questions peuvent rester ouvertes.
             « Nous ne savons pas encore » est une réponse acceptable.
+            Leur présence n’implique pas qu’elles soient partagées
+            par plusieurs personnes.
           </p>
+
 
           <div id="question-list"></div>
 
@@ -633,6 +731,7 @@
       </div>
 
     </section>
+
 
 
     <!-- =========================================================
@@ -651,6 +750,7 @@
           <div class="eyebrow">
             IA ET SYSTÈME OBSERVABLES
           </div>
+
 
           <h1>
             Journal public
@@ -672,8 +772,9 @@
         Les transformations significatives du projet
         doivent pouvoir laisser une trace :
         publication, évolution méthodologique,
-        synthèse collective ou incident important.
+        synthèse inter-contributions ou incident important.
       </p>
+
 
       <p class="hint">
         Les détails techniques susceptibles de faciliter
@@ -688,16 +789,19 @@
       ></div>
 
 
+
       <section class="card federation">
 
         <h2>
           Fédération
         </h2>
 
+
         <p>
           Cette instance peut échanger des informations
           avec d’autres instances autonomes du projet.
         </p>
+
 
         <p class="hint">
           Les informations provenant d’autres instances
@@ -718,6 +822,7 @@
   </main>
 
 
+
   <!-- ===========================================================
        PIED DE PAGE
   ============================================================ -->
@@ -725,11 +830,21 @@
   <footer class="footer shell">
 
     <p>
+
       <strong>
         Coexistence des intelligences
       </strong>
-      — état initial ouvert.
+
+      — phase initiale ouverte.
+
     </p>
+
+
+    <p>
+      Certaines règles actuelles sont provisoires
+      et n’ont pas encore été ratifiées collectivement.
+    </p>
+
 
     <p>
       Ni l’initiateur, ni une majorité,
@@ -738,6 +853,7 @@
     </p>
 
   </footer>
+
 
 
   <!-- ===========================================================
@@ -754,9 +870,11 @@
       ×
     </button>
 
+
     <div id="detail-content"></div>
 
   </dialog>
+
 
 
   <script
@@ -765,4 +883,5 @@
   ></script>
 
 </body>
+
 </html>
