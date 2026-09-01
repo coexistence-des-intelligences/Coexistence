@@ -44,18 +44,116 @@ async function logEvent(
       'events',
       {
         public_id: pid('E'),
+
         instance_id:
           env.INSTANCE_ID || 'local',
+
         event_type: type,
+
         public_summary: summary,
+
         details,
+
         visibility
       },
       false
     );
   } catch (_) {
-    // Le journal ne doit pas bloquer
-    // le traitement principal.
+    /*
+     * Le journal ne doit jamais empêcher
+     * le fonctionnement principal.
+     */
+  }
+}
+
+
+/* ============================================================
+   OUTILS DE VERSIONNEMENT ET DE PROVENANCE
+   ============================================================ */
+
+function analysisProtocol(env) {
+  return (
+    env.ANALYSIS_PROTOCOL_VERSION ||
+    '0.1'
+  );
+}
+
+
+function versionedConceptKey(
+  protocol,
+  conceptKey
+) {
+  return `${protocol}::${conceptKey}`;
+}
+
+
+/*
+ * Le fingerprint décrit uniquement
+ * l'ensemble des ANALYSES utilisées.
+ *
+ * Il ne fingerprint aucune personne,
+ * aucun navigateur et aucun appareil.
+ */
+function corpusFingerprint(rows = []) {
+  return rows
+    .map(row => row.public_id)
+    .filter(Boolean)
+    .sort()
+    .join('|');
+}
+
+
+function synthesisAnalysisIds(
+  rows = []
+) {
+  return rows
+    .map(row => row.public_id)
+    .filter(Boolean)
+    .sort();
+}
+
+
+function synthesisContributionIds(
+  rows = []
+) {
+  return rows
+    .map(
+      row =>
+        row?.contributions?.public_id
+    )
+    .filter(Boolean)
+    .sort();
+}
+
+
+async function existingSynthesis(
+  env,
+  protocol,
+  fingerprint
+) {
+  if (!fingerprint) {
+    return null;
+  }
+
+  try {
+    const rows = await sb(
+      env,
+      `collective_syntheses?` +
+      `protocol_version=eq.${encodeURIComponent(protocol)}` +
+      `&corpus_fingerprint=eq.${encodeURIComponent(fingerprint)}` +
+      `&select=id,public_id,protocol_version,created_at` +
+      `&limit=1`
+    );
+
+    return rows?.[0] || null;
+
+  } catch (_) {
+    /*
+     * Si cette vérification échoue,
+     * la contrainte UNIQUE en base reste
+     * un second niveau de protection.
+     */
+    return null;
   }
 }
 
@@ -89,11 +187,19 @@ async function relatedContributions(
     );
 
     return (rows || []).map(r => ({
-      public_id: r.public_id,
-      title: r.title,
-      summary: r.summary,
-      similarity: r.similarity
+      public_id:
+        r.public_id,
+
+      title:
+        r.title,
+
+      summary:
+        r.summary,
+
+      similarity:
+        r.similarity
     }));
+
   } catch (_) {
     return [];
   }
@@ -110,18 +216,18 @@ async function upsertAnalysisEntities(
   analysis
 ) {
   /*
-   * Une analyse individuelle enrichit la cartographie
-   * du corpus.
+   * Une analyse individuelle enrichit
+   * uniquement la cartographie du corpus.
    *
-   * Elle ne crée pas à elle seule :
+   * Elle ne crée pas directement :
    *
-   * - de désaccord structuré ;
-   * - de risque structuré ;
-   * - de question inter-contributions ;
-   * - de proposition à examiner.
+   * - désaccord structuré ;
+   * - risque structuré ;
+   * - question du corpus ;
+   * - proposition à examiner.
    *
-   * Ces candidats restent conservés dans le JSON
-   * de l'analyse individuelle.
+   * Les candidats restent conservés
+   * dans le JSON de l'analyse individuelle.
    */
 
   for (const t of analysis.themes || []) {
@@ -130,8 +236,12 @@ async function upsertAnalysisEntities(
       'themes',
       'canonical_key',
       {
-        canonical_key: t.key,
-        label: t.label,
+        canonical_key:
+          t.key,
+
+        label:
+          t.label,
+
         updated_at:
           new Date().toISOString()
       }
@@ -160,13 +270,12 @@ async function upsertAnalysisEntities(
 
 
   /*
-   * Relations entre contributions.
+   * Relation entre contributions.
    *
    * IMPORTANT :
-   * une relation entre deux contributions
-   * ne fournit aucune information fiable
-   * sur le nombre ou l'identité des personnes
-   * qui les ont produites.
+   * deux contributions reliées
+   * ne signifient jamais automatiquement
+   * deux personnes différentes.
    */
 
   for (
@@ -282,8 +391,7 @@ export async function processContribution(
               'gpt-5-mini',
 
             protocol_version:
-              env.ANALYSIS_PROTOCOL_VERSION ||
-              '0.1',
+              analysisProtocol(env),
 
             content:
               analysis,
@@ -355,6 +463,9 @@ export async function processContribution(
             analysisRow?.public_id ||
             null,
 
+          analysis_protocol:
+            analysisProtocol(env),
+
           themes:
             (analysis.themes || [])
               .map(x => x.key),
@@ -363,6 +474,7 @@ export async function processContribution(
             'Une contribution publiée constitue un élément du corpus. Elle ne permet aucune inférence sur le nombre total de personnes représentées.'
         }
       );
+
     } else {
       await logEvent(
         env,
@@ -437,17 +549,22 @@ export async function processContribution(
 async function recentAnalyses(env) {
   return sb(
     env,
-    'analyses?select=public_id,created_at,content,contributions!inner(public_id,title,summary,status)&status=eq.active&contributions.status=eq.published&order=created_at.desc&limit=80'
+    'analyses?' +
+    'select=public_id,created_at,content,' +
+    'contributions!inner(public_id,title,summary,status)' +
+    '&status=eq.active' +
+    '&contributions.status=eq.published' +
+    '&order=created_at.desc' +
+    '&limit=80'
   );
 }
 
 
 /*
- * Si une contribution a été analysée plusieurs fois,
+ * Si une même contribution possède plusieurs analyses,
  * seule son analyse active la plus récente est utilisée
- * dans une synthèse inter-contributions.
+ * pour la synthèse inter-contributions.
  */
-
 function latestAnalysisPerContribution(
   rows = []
 ) {
@@ -456,7 +573,7 @@ function latestAnalysisPerContribution(
 
 
   /*
-   * recentAnalyses() renvoie déjà les lignes
+   * recentAnalyses() renvoie les analyses
    * de la plus récente à la plus ancienne.
    */
 
@@ -489,16 +606,14 @@ function latestAnalysisPerContribution(
 
 
 /*
- * Les evidence_ids sont des identifiants
- * d'ANALYSES.
+ * Les evidence_ids désignent des ANALYSES.
  *
- * Ils permettent de prouver qu'une conclusion
- * est reliée à certaines contributions du corpus.
+ * Ils permettent de relier une conclusion
+ * à sa matière d'origine.
  *
- * Ils ne permettent PAS de prouver que les analyses
- * proviennent de personnes différentes.
+ * Ils ne constituent aucune preuve
+ * d'identité ou d'indépendance entre personnes.
  */
-
 function evidenceTools(rows = []) {
   const analysisToContribution =
     new Map(
@@ -526,14 +641,6 @@ function evidenceTools(rows = []) {
       )
     ];
 
-
-  /*
-   * Cette fonction compte uniquement
-   * les CONTRIBUTIONS distinctes.
-   *
-   * Elle ne doit jamais être interprétée
-   * comme un comptage de personnes.
-   */
 
   const distinctContributionCount =
     (ids = []) => {
@@ -584,26 +691,82 @@ export async function runCollectiveSynthesis(
   /*
    * DÉCISION PROVISOIRE
    *
-   * Le système attend actuellement trois
-   * CONTRIBUTIONS avant une analyse
-   * inter-contributions.
+   * Minimum actuel :
+   * trois CONTRIBUTIONS.
    *
-   * Ce seuil :
-   *
-   * - ne signifie pas trois personnes ;
-   * - ne prouve aucune pluralité sociale ;
-   * - n'est pas une règle démocratiquement ratifiée ;
-   * - reste contestable.
+   * Cela ne signifie jamais
+   * trois personnes distinctes.
    */
 
   if (rows.length < 3) {
     return {
       skipped: true,
+
       reason:
         'not_enough_contributions',
 
       contribution_count:
-        rows.length
+        rows.length,
+
+      contributor_count_known:
+        false
+    };
+  }
+
+
+  const protocol =
+    analysisProtocol(env);
+
+
+  const fingerprint =
+    corpusFingerprint(rows);
+
+
+  const analysisIds =
+    synthesisAnalysisIds(rows);
+
+
+  const contributionIds =
+    synthesisContributionIds(rows);
+
+
+  /*
+   * IDEMPOTENCE
+   *
+   * Même matière + même protocole
+   * = aucune raison de demander une nouvelle
+   * synthèse à l'IA.
+   */
+
+  const alreadyExists =
+    await existingSynthesis(
+      env,
+      protocol,
+      fingerprint
+    );
+
+
+  if (alreadyExists) {
+    return {
+      skipped: true,
+
+      reason:
+        'already_synthesized',
+
+      synthesis_id:
+        alreadyExists.public_id,
+
+      protocol_version:
+        protocol,
+
+      corpus_fingerprint:
+        fingerprint,
+
+      contribution_count:
+        rows.length,
+
+      contributor_count_known:
+        false
     };
   }
 
@@ -638,12 +801,10 @@ export async function runCollectiveSynthesis(
 
   /*
    * Nous conservons le nom historique
-   * de la table collective_syntheses
-   * pour compatibilité avec le schéma actuel.
+   * collective_syntheses dans le schéma,
+   * mais son sens public est :
    *
-   * Sémantiquement, son contenu doit désormais
-   * être présenté comme une synthèse
-   * inter-contributions.
+   * SYNTHÈSE INTER-CONTRIBUTIONS.
    */
 
   const synthesisRow =
@@ -660,14 +821,42 @@ export async function runCollectiveSynthesis(
             'gpt-5-mini',
 
           protocol_version:
-            env.ANALYSIS_PROTOCOL_VERSION ||
-            '0.1',
+            protocol,
 
           content:
-            synthesis
+            synthesis,
+
+          analysis_ids:
+            analysisIds,
+
+          contribution_ids:
+            contributionIds,
+
+          contribution_count:
+            rows.length,
+
+          contributor_count:
+            null,
+
+          contributor_count_known:
+            false,
+
+          corpus_fingerprint:
+            fingerprint
         }
       )
     )?.[0];
+
+
+  /*
+   * Tous les objets structurés produits
+   * ci-dessous gardent une référence
+   * vers la synthèse qui les a produits.
+   */
+
+  const sourceSynthesisId =
+    synthesisRow?.id ||
+    null;
 
 
   /* ==========================================================
@@ -685,13 +874,10 @@ export async function runCollectiveSynthesis(
 
 
     /*
-     * Deux contributions distinctes
-     * sont nécessaires pour promouvoir
-     * le thème comme régularité
-     * inter-contributions.
+     * Deux CONTRIBUTIONS distinctes minimum.
      *
-     * Cela ne signifie PAS
-     * deux personnes distinctes.
+     * Toujours aucune inférence
+     * sur le nombre de personnes.
      */
 
     if (
@@ -750,15 +936,6 @@ export async function runCollectiveSynthesis(
     }
 
 
-    /*
-     * Un désaccord structuré exige
-     * au moins deux contributions portant
-     * réellement des positions en tension.
-     *
-     * Il ne signifie PAS que deux personnes
-     * différentes sont en désaccord.
-     */
-
     if (
       distinctContributionCount(
         evidenceIds
@@ -766,6 +943,10 @@ export async function runCollectiveSynthesis(
     ) {
       continue;
     }
+
+
+    const conceptKey =
+      d.key;
 
 
     await upsert(
@@ -776,8 +957,20 @@ export async function runCollectiveSynthesis(
         public_id:
           pid('D'),
 
+        concept_key:
+          conceptKey,
+
         canonical_key:
-          d.key,
+          versionedConceptKey(
+            protocol,
+            conceptKey
+          ),
+
+        origin_protocol_version:
+          protocol,
+
+        source_synthesis_id:
+          sourceSynthesisId,
 
         title:
           d.title,
@@ -801,7 +994,7 @@ export async function runCollectiveSynthesis(
 
 
   /* ==========================================================
-     RISQUES SIGNALÉS PAR LE CORPUS
+     RISQUES SIGNALÉS
      ========================================================== */
 
   for (
@@ -814,19 +1007,15 @@ export async function runCollectiveSynthesis(
       );
 
 
-    /*
-     * Un risque substantiel peut apparaître
-     * dans une seule contribution.
-     *
-     * Il doit cependant rester relié
-     * à une analyse réellement présente.
-     */
-
     if (
       evidenceIds.length < 1
     ) {
       continue;
     }
+
+
+    const conceptKey =
+      r.key;
 
 
     await upsert(
@@ -837,8 +1026,20 @@ export async function runCollectiveSynthesis(
         public_id:
           pid('R'),
 
+        concept_key:
+          conceptKey,
+
         canonical_key:
-          r.key,
+          versionedConceptKey(
+            protocol,
+            conceptKey
+          ),
+
+        origin_protocol_version:
+          protocol,
+
+        source_synthesis_id:
+          sourceSynthesisId,
 
         title:
           r.title,
@@ -860,7 +1061,7 @@ export async function runCollectiveSynthesis(
 
 
   /* ==========================================================
-     QUESTIONS ISSUES DU CORPUS
+     QUESTIONS DU CORPUS
      ========================================================== */
 
   for (
@@ -880,6 +1081,10 @@ export async function runCollectiveSynthesis(
     }
 
 
+    const conceptKey =
+      q.key;
+
+
     await upsert(
       env,
       'questions',
@@ -888,8 +1093,20 @@ export async function runCollectiveSynthesis(
         public_id:
           pid('Q'),
 
+        concept_key:
+          conceptKey,
+
         canonical_key:
-          q.key,
+          versionedConceptKey(
+            protocol,
+            conceptKey
+          ),
+
+        origin_protocol_version:
+          protocol,
+
+        source_synthesis_id:
+          sourceSynthesisId,
 
         question:
           q.question,
@@ -928,6 +1145,10 @@ export async function runCollectiveSynthesis(
     }
 
 
+    const conceptKey =
+      p.key;
+
+
     await upsert(
       env,
       'proposals',
@@ -936,8 +1157,20 @@ export async function runCollectiveSynthesis(
         public_id:
           pid('P'),
 
+        concept_key:
+          conceptKey,
+
         canonical_key:
-          p.key,
+          versionedConceptKey(
+            protocol,
+            conceptKey
+          ),
+
+        origin_protocol_version:
+          protocol,
+
+        source_synthesis_id:
+          sourceSynthesisId,
 
         proposal_type:
           p.type,
@@ -958,12 +1191,9 @@ export async function runCollectiveSynthesis(
           'open',
 
         /*
-         * Nom technique conservé
-         * pour compatibilité historique.
-         *
-         * Il ne signifie pas qu'une
-         * collectivité humaine a ratifié
-         * la proposition.
+         * Nom technique historique conservé.
+         * Il ne signifie aucune adoption
+         * par une collectivité humaine.
          */
         source:
           'collective_synthesis',
@@ -993,18 +1223,16 @@ export async function runCollectiveSynthesis(
       );
 
 
-    /*
-     * Un candidat de version est seulement
-     * une PROPOSITION.
-     *
-     * Il ne constitue jamais une adoption
-     * automatique, quelle que soit la fréquence
-     * de l'idée dans le corpus.
-     */
-
     if (
       evidenceIds.length > 0
     ) {
+      const rawConceptKey =
+        `version-${
+          v.label ||
+          'candidate'
+        }`;
+
+
       await upsert(
         env,
         'proposals',
@@ -1013,11 +1241,20 @@ export async function runCollectiveSynthesis(
           public_id:
             pid('P'),
 
+          concept_key:
+            rawConceptKey,
+
           canonical_key:
-            `version-${
-              v.label ||
-              'candidate'
-            }`,
+            versionedConceptKey(
+              protocol,
+              rawConceptKey
+            ),
+
+          origin_protocol_version:
+            protocol,
+
+          source_synthesis_id:
+            sourceSynthesisId,
 
           proposal_type:
             'version_candidate',
@@ -1042,6 +1279,7 @@ export async function runCollectiveSynthesis(
 
           payload: {
             ...v,
+
             evidence_ids:
               evidenceIds
           },
@@ -1075,8 +1313,17 @@ export async function runCollectiveSynthesis(
         synthesisRow?.public_id ||
         null,
 
+      protocol_version:
+        protocol,
+
       headline:
         synthesis.headline,
+
+      analysis_ids:
+        analysisIds,
+
+      contribution_ids:
+        contributionIds,
 
       contribution_count:
         rows.length,
@@ -1086,6 +1333,9 @@ export async function runCollectiveSynthesis(
 
       contributor_count_known:
         false,
+
+      corpus_fingerprint:
+        fingerprint,
 
       methodological_note:
         'Le nombre de contributions analysées ne permet pas de connaître le nombre de personnes distinctes qui les ont produites.',
@@ -1098,10 +1348,30 @@ export async function runCollectiveSynthesis(
 
 
   return {
-    skipped: false,
+    skipped:
+      false,
+
+    synthesis_id:
+      synthesisRow?.public_id ||
+      null,
+
+    protocol_version:
+      protocol,
+
+    corpus_fingerprint:
+      fingerprint,
+
+    analysis_ids:
+      analysisIds,
+
+    contribution_ids:
+      contributionIds,
 
     contribution_count:
       rows.length,
+
+    contributor_count:
+      null,
 
     contributor_count_known:
       false,
@@ -1136,7 +1406,9 @@ export async function retryPending(
         c
       );
     } catch (_) {
-      // L'erreur a déjà été enregistrée.
+      /*
+       * L'erreur a déjà été enregistrée.
+       */
     }
   }
 
