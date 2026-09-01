@@ -12,22 +12,25 @@
  * - les décisions provisoires prises pendant la phase initiale ;
  * - les propositions de gouvernance non adoptées.
  *
+ * PRINCIPE MÉTHODOLOGIQUE IMPORTANT
+ * ----------------------------------
+ * Le système distingue actuellement des contributions,
+ * mais ne sait pas déterminer combien de personnes distinctes
+ * en sont à l'origine.
+ *
+ * Plusieurs contributions ne constituent donc pas une preuve
+ * de pluralité des contributeurs.
+ *
  * Cette migration N'INTRODUIT :
  *
  * - aucun vote ;
  * - aucun tirage au sort ;
+ * - aucune preuve d'identité ou d'unicité ;
  * - aucun mécanisme d'adoption automatique ;
  * - aucun nouveau pouvoir décisionnel.
  *
  * Elle crée uniquement une infrastructure de transparence,
  * de mémoire et de contestation.
- *
- * Une contribution pourra plus tard être reliée à l'un de ces objets
- * comme soutien, contestation, alternative ou simple contexte.
- *
- * Les décisions de la phase initiale restent explicitement provisoires
- * tant qu'elles n'ont pas été confirmées, modifiées ou rejetées
- * par un futur mécanisme de gouvernance suffisamment auditable.
  */
 
 
@@ -43,18 +46,12 @@ create table if not exists public.governance_items (
   id uuid primary key default gen_random_uuid(),
 
   /*
-   * Identifiant public lisible :
-   *
-   * GQ-.... = Governance Question
-   * DP-.... = Décision Provisoire
-   * PG-.... = Proposition de Gouvernance
+   * GQ-.... = question ouverte de gouvernance
+   * DP-.... = décision provisoire
+   * PG-.... = proposition de gouvernance
    */
   public_id text unique not null,
 
-  /*
-   * Clé technique stable utilisée pour les upserts
-   * et les rapprochements automatiques.
-   */
   canonical_key text unique not null,
 
   item_type text not null
@@ -69,47 +66,41 @@ create table if not exists public.governance_items (
   title text not null,
 
   /*
-   * Présentation courte et accessible au public.
+   * Présentation publique courte.
    */
   summary text not null,
 
   /*
-   * Pourquoi cet objet existe ou pourquoi cette règle
-   * a été introduite.
+   * Pourquoi l'objet existe ou pourquoi une règle
+   * provisoire a été introduite.
    */
   rationale text,
 
   /*
    * Meilleure objection actuellement connue.
-   *
-   * Une valeur NULL signifie simplement qu'aucune objection
-   * suffisamment substantielle n'a encore été enregistrée.
    */
   counterargument text,
 
   /*
-   * Alternatives déjà identifiées.
-   *
-   * Leur présence ne signifie pas qu'elles sont approuvées.
+   * Alternatives connues.
+   * Leur présence ne signifie pas qu'elles sont adoptées.
    */
   alternatives jsonb not null default '[]'::jsonb,
 
   /*
-   * Incertitudes ou problèmes non résolus.
+   * Questions ou incertitudes encore non résolues.
    */
   open_uncertainties jsonb not null default '[]'::jsonb,
 
   /*
-   * Identifiants publics des analyses, contributions,
-   * événements ou autres éléments ayant motivé l'objet.
+   * Provenance éventuelle.
    *
-   * Ce champ sert à la provenance, pas à mesurer une majorité.
+   * Ces identifiants ne doivent jamais être interprétés
+   * comme des votes ni comme un nombre de personnes.
    */
   evidence_ids jsonb not null default '[]'::jsonb,
 
   /*
-   * Origine explicite de l'objet.
-   *
    * Exemples :
    * initial_phase
    * contribution
@@ -118,12 +109,6 @@ create table if not exists public.governance_items (
    */
   source text not null default 'initial_phase',
 
-  /*
-   * Statut volontairement descriptif.
-   *
-   * Aucun de ces statuts n'implique à lui seul
-   * une légitimité démocratique.
-   */
   status text not null default 'open'
     check (
       status in (
@@ -139,10 +124,8 @@ create table if not exists public.governance_items (
     ),
 
   /*
-   * Permet d'indiquer explicitement si une décision
-   * a fait l'objet d'une ratification future.
-   *
-   * À ce stade, aucune ratification n'est créée.
+   * La présence d'un objet dans cette table
+   * ne constitue pas une ratification.
    */
   ratification_status text not null default 'not_applicable'
     check (
@@ -154,13 +137,6 @@ create table if not exists public.governance_items (
       )
     ),
 
-  /*
-   * Métadonnées futures sans nécessiter immédiatement
-   * une modification du schéma.
-   *
-   * Elles ne doivent jamais servir à introduire
-   * silencieusement une nouvelle règle de gouvernance.
-   */
   metadata jsonb not null default '{}'::jsonb,
 
   created_at timestamptz not null default now(),
@@ -177,7 +153,7 @@ create index if not exists governance_items_type_status_idx
 
 
 /* ============================================================
-   2. LIENS ENTRE CONTRIBUTIONS ET OBJETS DE GOUVERNANCE
+   2. RELATIONS ENTRE CONTRIBUTIONS ET OBJETS DE GOUVERNANCE
    ============================================================ */
 
 create table if not exists public.governance_item_contributions (
@@ -191,15 +167,8 @@ create table if not exists public.governance_item_contributions (
     on delete cascade,
 
   /*
-   * Une contribution peut :
+   * Relations descriptives uniquement.
    *
-   * - soutenir une idée ;
-   * - la contester ;
-   * - proposer une alternative ;
-   * - apporter du contexte ;
-   * - simplement lui être reliée.
-   *
-   * Ces relations sont descriptives.
    * Elles ne constituent PAS des votes.
    */
   relation_type text not null
@@ -233,7 +202,7 @@ create index if not exists governance_item_contributions_contribution_idx
 
 
 /* ============================================================
-   3. PRÉSERVER LES IDENTIFIANTS PUBLICS LORS DES MODIFICATIONS
+   3. PRÉSERVER LES IDENTIFIANTS PUBLICS
    ============================================================ */
 
 create or replace function public.preserve_governance_public_id()
@@ -272,16 +241,14 @@ execute function public.preserve_governance_public_id();
 
 
 /* ============================================================
-   4. RLS
+   4. ROW LEVEL SECURITY
    ============================================================ */
 
 /*
- * Comme pour le reste de la V0.1 :
+ * Comme pour le reste du système actuel,
+ * le navigateur ne doit pas accéder directement à ces tables.
  *
- * aucune table n'est directement exposée au navigateur.
- * Le public passera par les futures routes /api/public/*.
- *
- * Le Worker serveur utilisera la clé serveur Supabase.
+ * Les futures routes publiques passeront par le Worker.
  */
 
 alter table public.governance_items
@@ -292,7 +259,7 @@ alter table public.governance_item_contributions
 
 
 /* ============================================================
-   5. QUESTIONS DE GOUVERNANCE DÉJÀ OUVERTES
+   5. QUESTIONS OUVERTES DE GOUVERNANCE
    ============================================================ */
 
 insert into public.governance_items (
@@ -312,6 +279,10 @@ insert into public.governance_items (
 
 )
 values
+
+/* ------------------------------------------------------------
+   GQ-0001
+   ------------------------------------------------------------ */
 
 (
   'GQ-0001',
@@ -349,6 +320,11 @@ values
   'not_applicable'
 ),
 
+
+/* ------------------------------------------------------------
+   GQ-0002
+   ------------------------------------------------------------ */
+
 (
   'GQ-0002',
 
@@ -360,7 +336,7 @@ values
 
   'Le projet permet actuellement de contribuer sans compte. Cette propriété protège l’accessibilité et l’anonymat, mais complique toute future règle du type « une personne = une voix ».',
 
-  'La gouvernance future pourrait nécessiter une preuve d’unicité sans relier l’identité réelle aux contributions ou aux votes.',
+  'Une future gouvernance pourrait nécessiter une forme de preuve d’unicité sans relier l’identité réelle aux contributions ou aux décisions.',
 
   'Toute méthode de vérification de l’unicité peut introduire de nouveaux risques : exclusion, surveillance, dépendance à une autorité ou complexité technique.',
 
@@ -368,7 +344,7 @@ values
     "Preuve cryptographique d’unicité",
     "Credential délivré par un tiers indépendant",
     "Plusieurs niveaux d’assurance d’unicité",
-    "Ne pas utiliser le principe une personne = une voix",
+    "Ne pas utiliser le principe une personne égale une voix",
     "Autres solutions à proposer"
   ]'::jsonb,
 
@@ -385,6 +361,11 @@ values
   'not_applicable'
 ),
 
+
+/* ------------------------------------------------------------
+   GQ-0003
+   ------------------------------------------------------------ */
+
 (
   'GQ-0003',
 
@@ -396,9 +377,9 @@ values
 
   'Les IA peuvent analyser, contredire, comparer et préparer des propositions, mais leur éventuel pouvoir décisionnel n’a pas été défini.',
 
-  'Le projet cherche pour le moment à utiliser l’IA comme outil méthodologique et contradicteur plutôt que comme autorité morale finale.',
+  'Le projet utilise actuellement l’IA comme outil méthodologique et contradicteur plutôt que comme autorité morale finale.',
 
-  'Écarter durablement les intelligences artificielles de toute forme de participation pourrait devenir incohérent si certaines acquièrent un jour des capacités ou des intérêts moralement pertinents.',
+  'Écarter durablement les intelligences artificielles de toute forme de participation pourrait devenir discutable si certaines acquièrent un jour des capacités ou des intérêts moralement pertinents.',
 
   '[
     "IA sans droit de décision",
@@ -409,7 +390,7 @@ values
   ]'::jsonb,
 
   '[
-    "Qu’est-ce qui pourrait justifier une participation politique d’une intelligence artificielle ?",
+    "Qu’est-ce qui pourrait justifier une participation d’une intelligence artificielle ?",
     "Comment empêcher la multiplication artificielle d’agents de devenir une concentration de pouvoir ?",
     "Qui déciderait des critères d’éligibilité ?"
   ]'::jsonb,
@@ -420,6 +401,11 @@ values
 
   'not_applicable'
 ),
+
+
+/* ------------------------------------------------------------
+   GQ-0004
+   ------------------------------------------------------------ */
 
 (
   'GQ-0004',
@@ -454,13 +440,55 @@ values
   'open',
 
   'not_applicable'
+),
+
+
+/* ------------------------------------------------------------
+   GQ-0005
+   ------------------------------------------------------------ */
+
+(
+  'GQ-0005',
+
+  'contribution-diversity-vs-contributor-diversity',
+
+  'open_question',
+
+  'Comment distinguer la diversité des contributions de la diversité des contributeurs sans compromettre l’anonymat ?',
+
+  'Le système peut observer plusieurs contributions différentes, mais il ne sait pas actuellement combien de personnes distinctes en sont à l’origine.',
+
+  'Cette distinction est importante : plusieurs textes peuvent révéler une réelle diversité d’idées sans constituer pour autant une preuve de pluralité humaine ou sociale.',
+
+  'Introduire des mécanismes permettant de distinguer les contributeurs peut réduire l’anonymat, augmenter la complexité ou créer de nouvelles formes de surveillance et de pouvoir.',
+
+  '[
+    "Ne jamais chercher à identifier les contributeurs et afficher explicitement cette limite",
+    "Utiliser une preuve d’unicité facultative séparée des contributions",
+    "Créer plusieurs niveaux de confiance dans la diversité du corpus",
+    "Étudier uniquement les contributions sans faire d’inférence sur les personnes",
+    "Autres solutions à proposer"
+  ]'::jsonb,
+
+  '[
+    "Comment mesurer une pluralité sociale dans un système anonyme ?",
+    "Une même personne peut-elle légitimement produire plusieurs positions différentes ?",
+    "Comment empêcher plusieurs contributions d’une même origine de créer une fausse impression de consensus ?",
+    "Peut-on protéger l’anonymat tout en obtenant une preuve minimale d’indépendance entre certaines participations ?"
+  ]'::jsonb,
+
+  'initial_phase',
+
+  'open',
+
+  'not_applicable'
 )
 
 on conflict (canonical_key) do nothing;
 
 
 /* ============================================================
-   6. DÉCISIONS PROVISOIRES DÉJÀ PRISES
+   6. DÉCISIONS PROVISOIRES
    ============================================================ */
 
 insert into public.governance_items (
@@ -482,31 +510,38 @@ insert into public.governance_items (
 )
 values
 
+/* ------------------------------------------------------------
+   DP-0001
+   ------------------------------------------------------------ */
+
 (
   'DP-0001',
 
-  'minimum-three-contributions-for-collective-synthesis',
+  'minimum-three-contributions-for-multi-contribution-synthesis',
 
   'provisional_decision',
 
-  'Attendre trois contributions distinctes avant une synthèse collective',
+  'Attendre trois contributions avant une synthèse inter-contributions',
 
-  'Le système attend actuellement au moins trois contributions publiées distinctes avant de produire une synthèse collective.',
+  'Le système attend actuellement au moins trois contributions publiées avant de produire une analyse qui les examine ensemble.',
 
-  'Cette règle vise à réduire le risque qu’une contribution isolée soit présentée comme une tendance collective.',
+  'Cette règle vise à éviter qu’une contribution isolée soit automatiquement présentée comme décrivant à elle seule le corpus. Le nombre de contributions ne permet cependant pas de connaître le nombre de personnes distinctes qui les ont produites.',
 
-  'Une contribution unique peut parfois révéler un problème suffisamment important pour mériter immédiatement une attention collective.',
+  'Le seuil de trois reste arbitraire. Plusieurs contributions peuvent provenir d’une même personne et une contribution unique peut parfois révéler un problème important.',
 
   '[
     "Seuil différent",
     "Aucun seuil fixe",
-    "Seuil dépendant du type d’objet analysé",
-    "Détection de signaux importants même isolés"
+    "Seuil dépendant du type d’analyse",
+    "Détection de signaux importants même isolés",
+    "Analyse de plusieurs contributions sans employer de vocabulaire impliquant une pluralité de personnes"
   ]'::jsonb,
 
   '[
-    "Le nombre trois n’a pas encore été justifié collectivement.",
-    "Un seuil numérique ne garantit pas la diversité des contributeurs."
+    "Le nombre trois n’a pas été justifié collectivement.",
+    "Trois contributions ne signifient pas trois contributeurs.",
+    "Le système ne dispose actuellement d’aucune preuve d’indépendance entre les contributions.",
+    "Il faut distinguer diversité des textes et diversité sociale."
   ]'::jsonb,
 
   '[]'::jsonb,
@@ -518,6 +553,11 @@ values
   'not_ratified'
 ),
 
+
+/* ------------------------------------------------------------
+   DP-0002
+   ------------------------------------------------------------ */
+
 (
   'DP-0002',
 
@@ -527,20 +567,21 @@ values
 
   'Ne plus promouvoir automatiquement une analyse individuelle en objet collectif',
 
-  'Depuis le protocole d’analyse 0.2, une contribution individuelle peut générer des pistes internes, mais elle ne crée plus directement de désaccord, risque, question ou proposition collective.',
+  'Depuis le protocole d’analyse 0.2, une contribution individuelle peut générer des pistes internes, mais elle ne crée plus directement de désaccord, risque, question ou proposition présenté comme établi au niveau du corpus.',
 
-  'La première contribution avait conduit l’analyse 0.1 à créer un désaccord, quatre questions et cinq propositions à partir d’une seule parole. Cette promotion a été jugée trop rapide.',
+  'La première méthode pouvait transformer trop rapidement les implications d’une contribution en objets collectifs.',
 
-  'Une règle trop stricte peut retarder la visibilité d’une objection ou d’un risque important porté par une seule personne.',
+  'Une règle trop stricte peut retarder la visibilité d’une objection ou d’un risque important porté par une seule contribution.',
 
   '[
     "Maintenir la règle actuelle",
-    "Permettre certains signaux collectifs isolés avec un statut spécifique",
+    "Permettre certains signaux isolés avec un statut spécifique",
     "Utiliser différents seuils selon le type d’objet"
   ]'::jsonb,
 
   '[
-    "Comment distinguer un signal isolé important d’une sur-interprétation de l’IA ?"
+    "Comment distinguer un signal isolé important d’une sur-interprétation de l’IA ?",
+    "Comment conserver les objections minoritaires sans leur attribuer artificiellement une représentativité ?"
   ]'::jsonb,
 
   '[
@@ -555,6 +596,11 @@ values
 
   'not_ratified'
 ),
+
+
+/* ------------------------------------------------------------
+   DP-0003
+   ------------------------------------------------------------ */
 
 (
   'DP-0003',
@@ -580,7 +626,8 @@ values
 
   '[
     "Comment permettre une gouvernance fiable sans rendre le compte obligatoire ?",
-    "Comment conserver la simplicité actuelle ?"
+    "Comment conserver la simplicité actuelle ?",
+    "Comment ne pas transformer la lutte contre les participations multiples en mécanisme de surveillance ?"
   ]'::jsonb,
 
   '[]'::jsonb,
@@ -592,6 +639,11 @@ values
   'not_ratified'
 ),
 
+
+/* ------------------------------------------------------------
+   DP-0004
+   ------------------------------------------------------------ */
+
 (
   'DP-0004',
 
@@ -601,11 +653,11 @@ values
 
   'Présenter les analyses de l’IA comme contestables',
 
-  'Les interprétations produites par l’IA sont affichées séparément de la contribution humaine et explicitement présentées comme contestables.',
+  'Les interprétations produites par l’IA sont affichées séparément de la contribution et explicitement présentées comme contestables.',
 
   'Cette séparation vise à éviter qu’une interprétation automatisée soit confondue avec la parole du contributeur ou avec une vérité institutionnelle.',
 
-  'Afficher systématiquement l’incertitude de l’analyse ne garantit pas à lui seul que les utilisateurs disposeront d’un moyen réel de la corriger ou d’en limiter les effets.',
+  'Afficher l’incertitude de l’analyse ne garantit pas à lui seul que les utilisateurs disposent d’un moyen réel de la corriger ou d’en limiter les effets.',
 
   '[
     "Conserver la séparation actuelle",
@@ -653,6 +705,10 @@ insert into public.governance_items (
 )
 values
 
+/* ------------------------------------------------------------
+   PG-0001
+   ------------------------------------------------------------ */
+
 (
   'PG-0001',
 
@@ -688,6 +744,11 @@ values
   'not_applicable'
 ),
 
+
+/* ------------------------------------------------------------
+   PG-0002
+   ------------------------------------------------------------ */
+
 (
   'PG-0002',
 
@@ -699,7 +760,7 @@ values
 
   'Une future gouvernance pourrait permettre de prouver qu’une personne est autorisée à participer à un scrutin sans révéler son identité ni relier son vote à ses contributions.',
 
-  'Des mécanismes cryptographiques pourraient permettre de limiter le double vote tout en séparant l’identité, la contribution et le scrutin.',
+  'Des mécanismes cryptographiques pourraient permettre de limiter le double vote tout en séparant identité, contribution et scrutin.',
 
   'Empêcher une même preuve de voter deux fois ne suffit pas à empêcher une même personne d’obtenir plusieurs preuves. Le problème de l’unicité reste donc partiellement ouvert.',
 
@@ -722,6 +783,11 @@ values
 
   'not_applicable'
 ),
+
+
+/* ------------------------------------------------------------
+   PG-0003
+   ------------------------------------------------------------ */
 
 (
   'PG-0003',
@@ -757,6 +823,11 @@ values
 
   'not_applicable'
 ),
+
+
+/* ------------------------------------------------------------
+   PG-0004
+   ------------------------------------------------------------ */
 
 (
   'PG-0004',
@@ -851,6 +922,9 @@ begin
         'purpose',
         'Rendre les choix initiaux consultables et contestables sans introduire de nouveau pouvoir décisionnel.',
 
+        'methodological_limit',
+        'Le nombre de contributions ne permet pas de connaître le nombre de contributeurs distincts.',
+
         'introduced',
         jsonb_build_array(
           'questions ouvertes de gouvernance',
@@ -863,8 +937,10 @@ begin
         jsonb_build_array(
           'vote',
           'tirage au sort',
+          'preuve d’identité',
+          'preuve d’unicité',
           'adoption automatique',
-          'pouvoir décisionnel de l’IA'
+          'pouvoir décisionnel supplémentaire de l’IA'
         )
 
       ),
