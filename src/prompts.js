@@ -76,6 +76,7 @@ La question ouverte doit :
 - n'être renseignée que si elle apporte réellement quelque chose.
 
 Ne crée pas artificiellement une question ouverte si la contribution se suffit à elle-même.
+Dans ce cas, renvoie une chaîne vide dans le champ JSON "open_question".
 `;
 
 export const ANALYSIS_PROMPT = `
@@ -109,7 +110,7 @@ PRINCIPES MÉTHODOLOGIQUES
 - Les règles actuelles du projet sont elles-mêmes contestables : ne les protège pas de la critique.
 
 PROVENANCE ÉPISTÉMIQUE — RÈGLE CENTRALE DU PROTOCOLE 0.4
-Chaque élément doit être distingué selon son origine :
+Chaque élément structuré susceptible d'alimenter la cartographie ou le corpus public doit être distingué selon son origine :
 
 1. explicit
    L'idée, la question, le risque, la proposition ou la position est réellement exprimée dans la contribution citée.
@@ -122,6 +123,12 @@ Chaque élément doit être distingué selon son origine :
 
 Ne marque JAMAIS « explicit » uniquement parce qu'une idée paraît compatible, logique ou implicite dans le texte.
 « Implicitement soutenu » signifie inferred, jamais explicit.
+
+CLASSEMENT ANALYTIQUE
+- factual_claims, hypotheses, values, opinions et novel_ideas doivent uniquement reformuler des éléments réellement présents dans la contribution.
+- Ne place pas une reconstruction produite par l'IA dans ces listes comme si elle venait du contributeur.
+- best_counterargument est, par définition, une construction de l'IA et ne constitue jamais une position du corpus.
+- tensions contient des tensions analytiques possibles ; leur présence ne suffit jamais à créer un désaccord du corpus.
 
 ANONYMAT ET IDENTITÉ
 - Le système analyse des CONTRIBUTIONS, pas des identités humaines vérifiées.
@@ -156,6 +163,8 @@ RELATIONS ENTRE CONTRIBUTIONS
 
 THÈMES
 - Les thèmes sont des pistes de cartographie.
+- Chaque thème doit indiquer grounding = explicit ou inferred et citer ses source_contribution_ids.
+- Un thème est explicit uniquement si sa formulation est réellement ancrée dans la contribution citée.
 - Évite les catégories excessivement abstraites lorsque des formulations plus simples sont possibles.
 - Un thème ne signifie pas que le projet l'a adopté.
 - Une seule contribution peut révéler plusieurs thèmes ; évite cependant la multiplication artificielle des catégories.
@@ -221,9 +230,10 @@ OBSERVATIONS ISSUES D'UNE SEULE CONTRIBUTION
 DÉSACCORDS
 - Un désaccord du corpus exige au moins deux positions différentes effectivement et explicitement présentes.
 - Chaque position doit porter ses propres evidence_ids.
-- grounding = explicit uniquement si la position est réellement formulée dans les contributions sources.
-- « implicitement soutenu », « pourrait impliquer », « on peut en déduire » ou une position construite à partir d'un contre-argument IA doit être grounding = inferred ou ai_counterargument.
-- Si une opposition est intellectuellement intéressante mais qu'au moins une position n'est pas explicitement ancrée, place-la dans non_disagreement_tensions et explique pourquoi elle n'est pas un désaccord du corpus.
+- Dans disagreements, grounding doit toujours être explicit et la position doit être réellement formulée dans les contributions sources.
+- « implicitement soutenu », « pourrait impliquer », « on peut en déduire » ou une position construite à partir d'un contre-argument IA doit aller dans non_disagreement_tensions avec grounding = inferred ou ai_counterargument.
+- Chaque non_disagreement_tension doit conserver les positions examinées, leur grounding et leurs evidence_ids, puis expliquer pourquoi elle n'est pas un désaccord du corpus.
+- Si une opposition est intellectuellement intéressante mais qu'au moins une position n'est pas explicitement ancrée, place-la dans non_disagreement_tensions.
 - Ne fabrique pas deux camps lorsque le corpus montre un continuum ou une seule position accompagnée d'un contre-argument IA.
 
 RISQUES
@@ -247,6 +257,7 @@ PROPOSITIONS
 SIGNAUX STRUCTURELS
 - structural_signals ne sont NI des décisions NI des propositions de version.
 - Ils servent seulement à signaler qu'un élément pourrait mériter une investigation distincte car il touche potentiellement à la méthodologie, la gouvernance, la technique, la charte ou la sécurité.
+- Chaque signal doit indiquer s'il est explicit_in_corpus, inferred_by_ai ou mixed.
 - Chaque signal doit expliquer pourquoi il semble structurel, fournir le meilleur contre-argument et conserver les incertitudes non résolues.
 - Un signal structurel peut ensuite être ignoré, contesté, archivé ou étudié par un futur Evolution Engine.
 - Ne conclus jamais qu'un signal justifie automatiquement une modification du projet.

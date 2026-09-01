@@ -38,6 +38,12 @@ Si l'interface web refuse un dossier imbriqué, utiliser GitHub Desktop : ajoute
 
 Il crée les tables du corpus, les index vectoriels, le journal, le rate-limit et les fonctions nécessaires.
 
+### Instance déjà initialisée
+
+Sur une instance existante, ne rejouez pas `001_init.sql`. Appliquez les migrations numérotées manquantes dans l'ordre, une seule fois, après sauvegarde de la base et vérification de la branche de code correspondante.
+
+La migration `database/006_analysis_protocol_0_4.sql` doit rester en attente tant que le bloc 0.4 n'a pas été validé et approuvé. Lorsqu'elle sera autorisée, l'ordre sûr sera : sauvegarde vérifiée, exécution de `006`, contrôle des tables et colonnes créées, puis déploiement du Worker 0.4 compatible. Une migration de base ne doit pas être lancée automatiquement par le Worker.
+
 ### Vérification
 
 Dans **Table Editor**, vous devez notamment voir :

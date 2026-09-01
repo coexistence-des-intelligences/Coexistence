@@ -40,9 +40,21 @@ export const analysisSchema = {
         properties: {
           key: { type: 'string' },
           label: { type: 'string' },
-          confidence: { type: 'number', minimum: 0, maximum: 1 }
+          confidence: { type: 'number', minimum: 0, maximum: 1 },
+          grounding: { type: 'string', enum: ['explicit', 'inferred'] },
+          source_contribution_ids: {
+            type: 'array',
+            items: { type: 'string' },
+            minItems: 1
+          }
         },
-        required: ['key', 'label', 'confidence'],
+        required: [
+          'key',
+          'label',
+          'confidence',
+          'grounding',
+          'source_contribution_ids'
+        ],
         additionalProperties: false
       }
     },
@@ -224,7 +236,11 @@ export const collectiveSchema = {
           key: { type: 'string' },
           label: { type: 'string' },
           synthesis: { type: 'string' },
-          evidence_ids: { type: 'array', items: { type: 'string' } }
+          evidence_ids: {
+            type: 'array',
+            items: { type: 'string' },
+            minItems: 2
+          }
         },
         required: ['key', 'label', 'synthesis', 'evidence_ids'],
         additionalProperties: false
@@ -239,7 +255,12 @@ export const collectiveSchema = {
           key: { type: 'string' },
           label: { type: 'string' },
           summary: { type: 'string' },
-          evidence_ids: { type: 'array', items: { type: 'string' } }
+          evidence_ids: {
+            type: 'array',
+            items: { type: 'string' },
+            minItems: 1,
+            maxItems: 1
+          }
         },
         required: ['key', 'label', 'summary', 'evidence_ids'],
         additionalProperties: false
@@ -256,15 +277,20 @@ export const collectiveSchema = {
           summary: { type: 'string' },
           positions: {
             type: 'array',
+            minItems: 2,
             items: {
               type: 'object',
               properties: {
                 statement: { type: 'string' },
                 grounding: {
                   type: 'string',
-                  enum: ['explicit', 'inferred', 'ai_counterargument']
+                  enum: ['explicit']
                 },
-                evidence_ids: { type: 'array', items: { type: 'string' } }
+                evidence_ids: {
+                  type: 'array',
+                  items: { type: 'string' },
+                  minItems: 1
+                }
               },
               required: ['statement', 'grounding', 'evidence_ids'],
               additionalProperties: false
@@ -285,6 +311,25 @@ export const collectiveSchema = {
           key: { type: 'string' },
           title: { type: 'string' },
           summary: { type: 'string' },
+          positions: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                statement: { type: 'string' },
+                grounding: {
+                  type: 'string',
+                  enum: ['explicit', 'inferred', 'ai_counterargument']
+                },
+                evidence_ids: {
+                  type: 'array',
+                  items: { type: 'string' }
+                }
+              },
+              required: ['statement', 'grounding', 'evidence_ids'],
+              additionalProperties: false
+            }
+          },
           evidence_ids: { type: 'array', items: { type: 'string' } },
           reason_not_disagreement: { type: 'string' }
         },
@@ -292,6 +337,7 @@ export const collectiveSchema = {
           'key',
           'title',
           'summary',
+          'positions',
           'evidence_ids',
           'reason_not_disagreement'
         ],
@@ -380,6 +426,10 @@ export const collectiveSchema = {
           },
           title: { type: 'string' },
           summary: { type: 'string' },
+          grounding: {
+            type: 'string',
+            enum: ['explicit_in_corpus', 'inferred_by_ai', 'mixed']
+          },
           why_structural: { type: 'string' },
           strongest_counterargument: { type: 'string' },
           unresolved_uncertainties: { type: 'array', items: { type: 'string' } },
@@ -390,6 +440,7 @@ export const collectiveSchema = {
           'signal_type',
           'title',
           'summary',
+          'grounding',
           'why_structural',
           'strongest_counterargument',
           'unresolved_uncertainties',

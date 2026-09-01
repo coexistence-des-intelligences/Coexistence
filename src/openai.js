@@ -1,5 +1,18 @@
 import { summarySchema, analysisSchema, collectiveSchema } from './schemas.js';
 
+export function assertSupportedAnalysisProvider(env) {
+  const provider = String(env.ANALYSIS_PROVIDER || 'openai').trim().toLowerCase();
+
+  if (provider !== 'openai') {
+    throw new Error(
+      `Fournisseur d'analyse non pris en charge : ${provider}. ` +
+      `Aucun résultat ne sera enregistré avant l'ajout d'un adaptateur explicite.`
+    );
+  }
+
+  return provider;
+}
+
 function extractText(data) {
   if (typeof data?.output_text === 'string' && data.output_text.length > 0) {
     return data.output_text;
@@ -110,6 +123,8 @@ export function summarizeConversation(env, instructions, messages) {
 }
 
 export function analyzeContributionAI(env, instructions, payload) {
+  assertSupportedAnalysisProvider(env);
+
   return openAIJson(env, {
     instructions,
     input: JSON.stringify(payload),
@@ -120,6 +135,8 @@ export function analyzeContributionAI(env, instructions, payload) {
 }
 
 export function analyzeCollectiveAI(env, instructions, payload) {
+  assertSupportedAnalysisProvider(env);
+
   return openAIJson(env, {
     instructions,
     input: JSON.stringify(payload),
@@ -130,6 +147,8 @@ export function analyzeCollectiveAI(env, instructions, payload) {
 }
 
 export async function createEmbedding(env, text) {
+  assertSupportedAnalysisProvider(env);
+
   const res = await fetch('https://api.openai.com/v1/embeddings', {
     method: 'POST',
     headers: {

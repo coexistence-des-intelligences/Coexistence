@@ -44,7 +44,7 @@ function analysisProtocol(env) {
 }
 
 function analysisProvider(env) {
-  return env.ANALYSIS_PROVIDER || 'openai';
+  return String(env.ANALYSIS_PROVIDER || 'openai').trim().toLowerCase();
 }
 
 function analysisModel(env) {
@@ -127,6 +127,12 @@ async function relatedContributions(env, embedding, excludeId) {
 
 async function upsertAnalysisEntities(env, contribution, analysis) {
   for (const t of analysis.themes || []) {
+    const sourceIds = unique(t.source_contribution_ids || []);
+
+    if (t.grounding !== 'explicit' || !sourceIds.includes(contribution.public_id)) {
+      continue;
+    }
+
     const rows = await upsert(env, 'themes', 'canonical_key', {
       canonical_key: t.key,
       label: t.label,
@@ -327,11 +333,12 @@ function dedupeByKey(items = []) {
   return [...result.values()];
 }
 
-function sanitizeCollectiveSynthesis(raw, rows) {
+export function sanitizeCollectiveSynthesis(raw, rows) {
   const { cleanEvidenceIds, distinctContributionCount } = evidenceTools(rows);
 
   const diagnostics = {
     topics_moved_to_single: 0,
+    single_observations_moved_to_topics: 0,
     disagreements_demoted_to_tensions: 0,
     invalid_evidence_ids_removed: 0
   };
@@ -343,11 +350,26 @@ function sanitizeCollectiveSynthesis(raw, rows) {
     return cleaned;
   };
 
-  const singleObservations = (raw.single_contribution_observations || [])
-    .map(x => ({ ...x, evidence_ids: cleanIds(x.evidence_ids) }))
-    .filter(x => x.evidence_ids.length > 0);
-
   const emergentTopics = [];
+  const singleObservations = [];
+
+  for (const observation of raw.single_contribution_observations || []) {
+    const evidenceIds = cleanIds(observation.evidence_ids);
+    const contributionCount = distinctContributionCount(evidenceIds);
+
+    if (contributionCount === 1) {
+      singleObservations.push({ ...observation, evidence_ids: evidenceIds });
+    } else if (contributionCount >= 2) {
+      diagnostics.single_observations_moved_to_topics++;
+      emergentTopics.push({
+        key: observation.key,
+        label: observation.label,
+        synthesis: observation.summary,
+        evidence_ids: evidenceIds
+      });
+    }
+  }
+
   for (const topic of raw.emergent_topics || []) {
     const evidenceIds = cleanIds(topic.evidence_ids);
 
@@ -365,8 +387,24 @@ function sanitizeCollectiveSynthesis(raw, rows) {
   }
 
   const nonDisagreementTensions = (raw.non_disagreement_tensions || [])
-    .map(x => ({ ...x, evidence_ids: cleanIds(x.evidence_ids) }))
-    .filter(x => x.evidence_ids.length > 0);
+    .map(tension => {
+      const positions = (tension.positions || [])
+        .map(position => ({
+          ...position,
+          evidence_ids: cleanIds(position.evidence_ids)
+        }))
+        .filter(position => String(position.statement || '').trim());
+
+      return {
+        ...tension,
+        positions,
+        evidence_ids: unique([
+          ...cleanIds(tension.evidence_ids),
+          ...positions.flatMap(position => position.evidence_ids)
+        ])
+      };
+    })
+    .filter(tension => tension.evidence_ids.length > 0);
 
   const disagreements = [];
 
@@ -399,6 +437,7 @@ function sanitizeCollectiveSynthesis(raw, rows) {
         key: `tension-${d.key}`,
         title: d.title,
         summary: d.summary,
+        positions,
         evidence_ids: evidenceIds,
         reason_not_disagreement: reasons.join(' ; ')
       });
@@ -635,6 +674,7 @@ export async function runCollectiveSynthesis(env) {
       summary: s.summary,
       why_structural: s.why_structural,
       strongest_counterargument: s.strongest_counterargument,
+      grounding: s.grounding,
       unresolved_uncertainties: s.unresolved_uncertainties || [],
       evidence_ids: s.evidence_ids,
       origin_protocol_version: protocol,

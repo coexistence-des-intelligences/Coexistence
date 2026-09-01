@@ -10,13 +10,16 @@ Première instance technique destinée à rendre le projet **accessible, vivant,
 - conservation facultative de la conversation complète ;
 - analyse structurée de chaque contribution ;
 - rapprochement sémantique avec le corpus existant ;
-- thèmes, tensions, relations, risques, questions et propositions ;
-- désaccords conservés au lieu d'être aplatis ;
+- provenance épistémique explicite pour les objets qui alimentent le corpus ;
+- séparation entre observations issues d'une contribution et thèmes réellement multi-contributions ;
+- désaccords conservés avec la provenance de chaque position ;
+- tensions inférées conservées sans être promues en désaccords du corpus ;
+- thèmes, relations, risques, questions et propositions traçables ;
 - tableau de bord public ;
 - journal public du travail institutionnel de l'IA ;
 - quarantaine en cas de risque de confidentialité ou d'intégrité ;
 - synthèse collective automatique toutes les 6 heures lorsqu'il y a assez de matière ;
-- candidats de version possibles, **jamais adoptés automatiquement** ;
+- signaux structurels non décisionnels pour un futur Evolution Engine ;
 - reprise automatique des traitements ayant échoué ;
 - premier protocole de fédération inter-instance en lecture seule ;
 - aucune clé secrète dans le navigateur.
@@ -46,6 +49,7 @@ Cloudflare Worker + Static Assets
    │      ├── thèmes / relations
    │      ├── désaccords / risques / questions
    │      ├── propositions
+   │      ├── signaux structurels
    │      └── journal public
    │
    └── traitement périodique

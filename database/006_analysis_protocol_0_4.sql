@@ -228,6 +228,12 @@ create table if not exists public.structural_signals (
 
   title text not null,
   summary text not null,
+  grounding text not null
+    check (grounding in (
+      'explicit_in_corpus',
+      'inferred_by_ai',
+      'mixed'
+    )),
   why_structural text not null,
   strongest_counterargument text not null,
   unresolved_uncertainties jsonb not null default '[]'::jsonb,

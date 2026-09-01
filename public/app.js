@@ -41,6 +41,65 @@ function fmtDate(v) {
 }
 
 
+function groundingLabel(value) {
+  const labels = {
+    explicit:
+      'explicite dans la contribution',
+
+    inferred:
+      'inféré par l’IA',
+
+    ai_counterargument:
+      'contre-argument construit par l’IA',
+
+    explicit_in_corpus:
+      'explicite dans le corpus',
+
+    inferred_by_ai:
+      'inféré par l’IA',
+
+    mixed:
+      'origine mixte'
+  };
+
+  return labels[value] || value || '';
+}
+
+
+function provenanceMeta(row = {}) {
+  const protocol =
+    row.origin_protocol_version ||
+    row.protocol_version;
+
+  const provider =
+    row.origin_provider ||
+    row.provider;
+
+  const model =
+    row.origin_model ||
+    row.model;
+
+  const origin = [
+    protocol
+      ? `protocole ${protocol}`
+      : '',
+
+    provider,
+    model
+  ]
+    .filter(Boolean)
+    .join(' / ');
+
+  return [
+    groundingLabel(row.grounding),
+    origin
+  ]
+    .filter(Boolean)
+    .map(esc)
+    .join(' · ');
+}
+
+
 async function api(path, options = {}) {
   const res = await fetch(path, {
     ...options,
@@ -532,8 +591,42 @@ function itemHtml(
               ${
                 positions
                   .map(
-                    x =>
-                      `<li>${esc(x)}</li>`
+                    x => {
+                      if (
+                        typeof x !==
+                        'object'
+                      ) {
+                        return `<li>${esc(x)}</li>`;
+                      }
+
+                      const positionMeta = [
+                        groundingLabel(
+                          x.grounding
+                        ),
+
+                        (x.evidence_ids || [])
+                          .length
+                          ? `preuves : ${
+                              x.evidence_ids
+                                .join(', ')
+                            }`
+                          : ''
+                      ]
+                        .filter(Boolean)
+                        .map(esc)
+                        .join(' · ');
+
+                      return `
+                        <li>
+                          ${esc(x.statement || '')}
+                          ${
+                            positionMeta
+                              ? `<div class="meta">${positionMeta}</div>`
+                              : ''
+                          }
+                        </li>
+                      `;
+                    }
                   )
                   .join('')
               }
@@ -618,7 +711,7 @@ async function loadOverview() {
     ],
 
     [
-      'Pistes thématiques',
+      'Thèmes multi-contributions',
       c.themes
     ],
 
@@ -687,9 +780,24 @@ async function loadOverview() {
                   'Piste thématique issue du corpus',
 
                 meta:
-                  fmtDate(
-                    t.updated_at
-                  )
+                  [
+                    fmtDate(
+                      t.updated_at
+                    ),
+
+                    provenanceMeta({
+                      protocol_version:
+                        t.description_protocol_version,
+
+                      provider:
+                        t.description_provider,
+
+                      model:
+                        t.description_model
+                    })
+                  ]
+                    .filter(Boolean)
+                    .join(' · ')
               })
           )
           .join('')
@@ -711,17 +819,104 @@ async function loadOverview() {
 
 
   if (synthesis) {
-    const emergent =
-      (
-        synthesis.emergent_topics ||
-        []
-      )
-        .map(
-          x => x.synthesis
-        )
-        .filter(Boolean)
-        .slice(0, 3)
-        .join(' ');
+    const synthesisSection = (
+      title,
+      items,
+      textField,
+      emptyText = ''
+    ) => {
+      const visible =
+        (items || [])
+          .filter(
+            x => x?.[textField]
+          );
+
+      if (!visible.length) {
+        return emptyText
+          ? `
+            <div class="open-question">
+              <strong>${esc(title)}</strong>
+              <p class="hint">${esc(emptyText)}</p>
+            </div>
+          `
+          : '';
+      }
+
+      return `
+        <div class="open-question">
+          <strong>${esc(title)}</strong>
+          <ul class="positions">
+            ${
+              visible
+                .map(
+                  x => `
+                    <li>
+                      ${esc(x[textField])}
+                      ${
+                        (x.evidence_ids || [])
+                          .length
+                          ? `
+                            <div class="meta">
+                              preuves : ${esc(x.evidence_ids.join(', '))}
+                            </div>
+                          `
+                          : ''
+                      }
+                    </li>
+                  `
+                )
+                .join('')
+            }
+          </ul>
+        </div>
+      `;
+    };
+
+    const tensionSection =
+      (synthesis.non_disagreement_tensions || [])
+        .length
+        ? `
+          <div class="open-question">
+            <strong>
+              Tensions analytiques — pas des désaccords du corpus
+            </strong>
+            ${
+              synthesis.non_disagreement_tensions
+                .map(
+                  tension => `
+                    <h4>${esc(tension.title || '')}</h4>
+                    <p>${esc(tension.summary || '')}</p>
+                    <p class="hint">
+                      ${esc(tension.reason_not_disagreement || '')}
+                    </p>
+                    <ul class="positions">
+                      ${
+                        (tension.positions || [])
+                          .map(
+                            position => `
+                              <li>
+                                ${esc(position.statement || '')}
+                                <div class="meta">
+                                  ${esc(groundingLabel(position.grounding))}
+                                  ${
+                                    (position.evidence_ids || []).length
+                                      ? ` · preuves : ${esc(position.evidence_ids.join(', '))}`
+                                      : ''
+                                  }
+                                </div>
+                              </li>
+                            `
+                          )
+                          .join('')
+                      }
+                    </ul>
+                  `
+                )
+                .join('')
+            }
+          </div>
+        `
+        : '';
 
 
     $('#latest-synthesis')
@@ -738,21 +933,46 @@ async function loadOverview() {
           </h3>
 
           ${
-            emergent
-              ? `<p>${esc(emergent)}</p>`
-              : `
-                <p class="hint">
-                  La synthèse ne permet pas encore de dégager une conclusion simple.
-                </p>
-              `
+            synthesisSection(
+              'Thèmes présents dans plusieurs contributions',
+              synthesis.emergent_topics,
+              'synthesis',
+              'Aucun thème multi-contributions suffisamment étayé.'
+            )
+          }
+
+          ${
+            synthesisSection(
+              'Observations issues d’une seule contribution',
+              synthesis.single_contribution_observations,
+              'summary'
+            )
+          }
+
+          ${tensionSection}
+
+          ${
+            synthesisSection(
+              'Signaux structurels à examiner — non décisionnels',
+              synthesis.structural_signals,
+              'summary'
+            )
           }
 
           <div class="meta">
             ${
-              fmtDate(
-                d.latest_synthesis
-                  .created_at
-              )
+              [
+                fmtDate(
+                  d.latest_synthesis
+                    .created_at
+                ),
+
+                provenanceMeta(
+                  d.latest_synthesis
+                )
+              ]
+                .filter(Boolean)
+                .join(' · ')
             }
           </div>
 
@@ -866,15 +1086,23 @@ async function loadDisagreements() {
                         x.summary,
 
                       meta:
-                        `mis à jour ${
-                          fmtDate(
-                            x.updated_at
-                          )
-                        }`,
+                        [
+                          `mis à jour ${
+                            fmtDate(
+                              x.updated_at
+                            )
+                          }`,
+
+                          provenanceMeta(x)
+                        ]
+                          .filter(Boolean)
+                          .join(' · '),
 
                       positions:
-                        x.positions ||
-                        []
+                        x.position_provenance
+                          ?.length
+                          ? x.position_provenance
+                          : x.positions || []
                     })
                   }
 
@@ -944,16 +1172,20 @@ async function loadEvolution() {
                         p.summary,
 
                       meta:
-                        `${
+                        [
                           esc(
                             p.proposal_type ||
                             ''
-                          )
-                        } · ${
+                          ),
+
                           fmtDate(
                             p.updated_at
-                          )
-                        }`
+                          ),
+
+                          provenanceMeta(p)
+                        ]
+                          .filter(Boolean)
+                          .join(' · ')
                     })
                   }
 
@@ -1016,9 +1248,15 @@ async function loadEvolution() {
                     r.summary,
 
                   meta:
-                    fmtDate(
-                      r.updated_at
-                    )
+                    [
+                      fmtDate(
+                        r.updated_at
+                      ),
+
+                      provenanceMeta(r)
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')
                 })
             )
             .join('')
@@ -1050,9 +1288,15 @@ async function loadEvolution() {
                   summary: '',
 
                   meta:
-                    fmtDate(
-                      q.updated_at
-                    )
+                    [
+                      fmtDate(
+                        q.updated_at
+                      ),
+
+                      provenanceMeta(q)
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')
                 })
             )
             .join('')
