@@ -1,6 +1,7 @@
 # Commencer ici
 
-**Statut : proposition de document d’orientation — non ratifiée**  
+**Statut : proposition de document d’orientation — non ratifiée**
+
 **Dernière mise à jour : 2 septembre 2026**
 
 ## Le projet en deux minutes

@@ -1,6 +1,7 @@
 # État actuel du projet
 
-**Date du point d’arrêt : 2 septembre 2026**  
+**Date du point d’arrêt : 2 septembre 2026**
+
 **Statut : photographie factuelle à maintenir à jour**
 
 ## Nature de cette phase
