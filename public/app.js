@@ -7,6 +7,19 @@ const state = {
   busy: false
 };
 
+const publicViews = [
+  'understand',
+  'disagreements',
+  'evolution',
+  'journal'
+];
+
+const validViews = [
+  'home',
+  'project',
+  ...publicViews
+];
+
 const firstMessage =
   "Qu’aimeriez-vous nous dire ? Cela peut être une expérience, une inquiétude, une idée, un désaccord, quelque chose que vous aimeriez préserver… ou simplement quelque chose qui vous semble important.";
 
@@ -439,7 +452,7 @@ async function publishContribution() {
     btn.disabled = false;
 
     btn.textContent =
-      'Valider ma contribution';
+      'Publier ma contribution';
   }
 }
 
@@ -448,7 +461,17 @@ async function publishContribution() {
    NAVIGATION
    ============================================================ */
 
-function nav(name) {
+function nav(
+  name,
+  historyMode = 'push'
+) {
+  const target =
+    $(`#view-${name}`);
+
+  if (!target) {
+    name = 'home';
+  }
+
   $$('.view').forEach(
     v =>
       v.classList.remove(
@@ -456,26 +479,79 @@ function nav(name) {
       )
   );
 
-  $$('.nav').forEach(
-    n =>
-      n.classList.toggle(
+  const primaryName =
+    publicViews.includes(name)
+      ? 'understand'
+      : name;
+
+  $$('.nav').forEach(n => {
+    const active =
+      n.dataset.nav === primaryName;
+
+    n.classList.toggle(
+      'active',
+      active
+    );
+
+    if (active) {
+      n.setAttribute(
+        'aria-current',
+        'page'
+      );
+    } else {
+      n.removeAttribute(
+        'aria-current'
+      );
+    }
+  });
+
+  $$('.section-nav-button')
+    .forEach(button => {
+      const active =
+        button.dataset.nav === name;
+
+      button.classList.toggle(
         'active',
-        n.dataset.nav === name
-      )
-  );
+        active
+      );
+
+      button.setAttribute(
+        'aria-pressed',
+        String(active)
+      );
+    });
+
+  $('#explore-nav')
+    .classList.toggle(
+      'hidden',
+      !publicViews.includes(name)
+    );
 
   $(`#view-${name}`)
     .classList.add(
       'active'
     );
 
-  history.replaceState(
-    null,
-    '',
-    `#${name}`
-  );
+  const nextHash =
+    `#${name}`;
 
-  if (name !== 'home') {
+  if (
+    historyMode !== 'none' &&
+    location.hash !== nextHash
+  ) {
+    const method =
+      historyMode === 'replace'
+        ? 'replaceState'
+        : 'pushState';
+
+    history[method](
+      null,
+      '',
+      nextHash
+    );
+  }
+
+  if (publicViews.includes(name)) {
     loadPublic(name);
   }
 
@@ -483,6 +559,65 @@ function nav(name) {
     top: 0,
     behavior: 'smooth'
   });
+}
+
+
+/* ============================================================
+   COMPRÉHENSION PROGRESSIVE
+   ============================================================ */
+
+const depthLabels = {
+  1: 'L’essentiel',
+  2: 'Le fonctionnement',
+  3: 'Les garde-fous',
+  4: 'Les sources'
+};
+
+
+function setComprehensionDepth(value) {
+  const depth =
+    Math.min(
+      4,
+      Math.max(
+        1,
+        Number(value) || 1
+      )
+    );
+
+  $('#comprehension-depth').value =
+    String(depth);
+
+  $('#depth-number').textContent =
+    `Niveau ${depth}`;
+
+  $('#depth-name').textContent =
+    depthLabels[depth];
+
+  $$('.depth-section')
+    .forEach(section => {
+      section.hidden =
+        Number(section.dataset.depth) > depth;
+    });
+
+  $$('[data-depth-select]')
+    .forEach(button => {
+      const active =
+        Number(button.dataset.depthSelect) === depth;
+
+      button.classList.toggle(
+        'active',
+        active
+      );
+
+      button.setAttribute(
+        'aria-pressed',
+        String(active)
+      );
+    });
+
+  $('#depth-announcement').textContent =
+    `Niveau ${depth} sélectionné : ${depthLabels[depth]}. ` +
+    `Les niveaux 1 à ${depth} sont affichés.`;
 }
 
 
@@ -1408,16 +1543,55 @@ async function openDetail(id) {
    ÉVÉNEMENTS DE NAVIGATION
    ============================================================ */
 
-$$('.nav')
+$$('[data-nav]')
   .forEach(
     n => {
       n.onclick =
-        () =>
+        event => {
+          event.preventDefault();
+
           nav(
             n.dataset.nav
           );
+        };
     }
   );
+
+
+$('#comprehension-depth')
+  .addEventListener(
+    'input',
+    event =>
+      setComprehensionDepth(
+        event.target.value
+      )
+  );
+
+
+$$('[data-depth-select]')
+  .forEach(button => {
+    button.onclick =
+      () =>
+        setComprehensionDepth(
+          button.dataset.depthSelect
+        );
+  });
+
+
+window.addEventListener(
+  'popstate',
+  () => {
+    const route =
+      location.hash.slice(1);
+
+    nav(
+      validViews.includes(route)
+        ? route
+        : 'home',
+      'none'
+    );
+  }
+);
 
 
 $$('.refresh')
@@ -1581,6 +1755,9 @@ if (SpeechRecognition) {
 resetConversation();
 
 
+setComprehensionDepth(1);
+
+
 const initial =
   (
     location.hash ||
@@ -1589,13 +1766,8 @@ const initial =
 
 
 nav(
-  [
-    'home',
-    'understand',
-    'disagreements',
-    'evolution',
-    'journal'
-  ].includes(initial)
+  validViews.includes(initial)
     ? initial
-    : 'home'
+    : 'home',
+  'replace'
 );

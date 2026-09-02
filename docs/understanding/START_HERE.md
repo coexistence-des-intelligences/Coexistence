@@ -10,7 +10,7 @@ Coexistence des intelligences est un projet à vocation collective où chacun pe
 
 L’intelligence artificielle aide à comprendre, relier et confronter les contributions. Elle ne décide pas de ce que le projet doit penser.
 
-Rien n’est partagé sans validation explicite. Le contributeur doit pouvoir choisir ce qu’il souhaite conserver, rendre visible ou garder privé.
+Rien n’est publié sans validation explicite. Aujourd’hui, le contributeur choisit de publier ou non la synthèse et, s’il la publie, de transmettre ou non la conversation complète. Celle-ci n’est pas affichée dans la contribution publique.
 
 Les désaccords restent accessibles et une idée minoritaire n’est pas considérée comme inférieure.
 
@@ -28,12 +28,14 @@ Le contre-argument ne sert pas à conduire une personne vers une conclusion pré
 
 - parler librement, sans lecture préalable ;
 - relire et corriger ce que l’IA croit avoir compris ;
-- choisir de partager ou non votre contribution ;
-- choisir séparément la visibilité de la contribution et de la conversation ;
+- choisir de publier ou non votre contribution ;
+- si vous la publiez, choisir séparément si la conversation complète est transmise ;
 - explorer les contributions et leurs relations ;
 - examiner les désaccords et les questions ouvertes ;
 - corriger, nuancer ou faire évoluer une position antérieure ;
 - critiquer le projet, y compris ses fondations.
+
+Le système ne permet pas encore de conserver une contribution privée dans un corpus privé. Aujourd’hui, une personne peut publier sa contribution après validation ou ne rien publier. Cette limite doit rester explicite jusqu’à ce qu’une fonction distincte soit réellement conçue et activée.
 
 ## Ce que le projet ne prétend pas être
 

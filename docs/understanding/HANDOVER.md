@@ -81,6 +81,19 @@ La transmission est réussie si une personne extérieure peut :
 - savoir où chercher une information ;
 - comprendre comment le projet continue sans l’initiateur.
 
+## Maintenir la compréhension publique
+
+L’interface « Le projet » est une porte d’entrée progressive vers cette documentation. Elle ne doit pas devenir une présentation figée ou promotionnelle séparée de l’état réel.
+
+Toute modification affectant une fonction, une règle, une limite ou une orientation doit vérifier les niveaux concernés :
+
+1. **L’essentiel** : la finalité et les libertés promises restent-elles exactes ?
+2. **Le fonctionnement** : le parcours décrit correspond-il au code actif ?
+3. **Les garde-fous** : les pouvoirs, limites et contradictions sont-ils toujours visibles ?
+4. **Les sources** : l’état présent, préparé et futur ainsi que la date de mise à jour sont-ils corrects ?
+
+La page publique facilite l’accès. Les documents sources conservent le contexte. En cas de contradiction, celle-ci doit être corrigée ou signalée explicitement, jamais masquée par une formulation plus simple.
+
 ## Transfert technique progressif
 
 1. Documenter les comptes, rôles et responsabilités sans exposer les secrets.
