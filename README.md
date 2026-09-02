@@ -1,6 +1,6 @@
 # Coexistence des intelligences — système vivant V0.1
 
-Première instance technique destinée à rendre le projet **accessible, vivant, traçable, contradictoire, réplicable et progressivement indépendant de son initiateur**.
+Première instance technique d’un projet à vocation collective, destinée à rendre la contribution **accessible, vivante, traçable, contradictoire, réplicable et progressivement indépendante de son initiateur**.
 
 ## Ce que fait cette V0.1
 
@@ -16,7 +16,8 @@ Première instance technique destinée à rendre le projet **accessible, vivant,
 - journal public du travail institutionnel de l'IA ;
 - quarantaine en cas de risque de confidentialité ou d'intégrité ;
 - synthèse collective automatique toutes les 6 heures lorsqu'il y a assez de matière ;
-- candidats de version possibles, **jamais adoptés automatiquement** ;
+- candidats de version encore possibles dans le protocole actuellement actif, mais jamais adoptés automatiquement ;
+- leur remplacement par des signaux structurels non décisionnels est préparé dans le protocole 0.4, encore non déployé ;
 - reprise automatique des traitements ayant échoué ;
 - premier protocole de fédération inter-instance en lecture seule ;
 - aucune clé secrète dans le navigateur.
@@ -26,6 +27,21 @@ Première instance technique destinée à rendre le projet **accessible, vivant,
 > La simplicité est devant. La rigueur est derrière.
 
 Une personne peut contribuer en quelques secondes. La complexité de classement, confrontation et mémoire est portée par le système, tout en restant contestable.
+
+## Comprendre le projet
+
+Le projet distingue l’essentiel, son fonctionnement, ses fondations et ses sources. Les synthèses facilitent la lecture sans remplacer les documents ou conversations d’origine.
+
+- [Commencer ici](docs/understanding/START_HERE.md)
+- [État actuel](docs/understanding/PROJECT_STATE.md)
+- [Finalité, philosophie et méthode](docs/understanding/PHILOSOPHY_AND_METHOD.md)
+- [Contradictions et questions ouvertes](docs/understanding/CONTRADICTIONS_AND_OPEN_QUESTIONS.md)
+- [Journal initial des décisions](docs/understanding/DECISION_LOG.md)
+- [Guide de transmission](docs/understanding/HANDOVER.md)
+- [Glossaire](docs/understanding/GLOSSARY.md)
+- [Index des conversations et sources](docs/understanding/CONVERSATION_ARCHIVE_INDEX.md)
+
+Ces documents constituent actuellement des propositions de travail. Une règle techniquement active ne doit pas être confondue avec une décision collectivement ratifiée.
 
 ## Architecture
 
@@ -54,9 +70,20 @@ Cloudflare Worker + Static Assets
           └── observation d'instances homologues
 ```
 
-## À faire maintenant
+## Priorité actuelle
 
-Suivre **`DEPLOYMENT.md`** dans l'ordre. Aucun code n'est à écrire.
+Le développement de nouvelles fonctions est temporairement suspendu au profit de la lisibilité, de l’accessibilité et de la transmission.
+
+Avant toute nouvelle migration ou évolution structurelle :
+
+1. consolider les documents de compréhension ;
+2. permettre une relecture extérieure ;
+3. distinguer clairement ce qui est actif, proposé ou encore ouvert ;
+4. préparer la continuité du projet sans dépendance à son initiateur.
+
+Le protocole 0.4 reste préparé sur une branche distincte. La migration `006` ne doit pas être exécutée avant une décision explicite concernant son intégration et son déploiement.
+
+`DEPLOYMENT.md` reste le document de référence pour les opérations techniques autorisées.
 
 ## Secrets nécessaires
 
