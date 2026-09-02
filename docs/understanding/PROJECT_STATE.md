@@ -13,6 +13,8 @@ Ses principes n’ont pas encore été ratifiés par une communauté extérieure
 ## Présent dans le projet
 
 - porte d’entrée conversationnelle ;
+- interface publique à quatre niveaux de compréhension progressive ;
+- navigation principale simplifiée entre contribution, exploration du corpus et compréhension du projet ;
 - synthèse contrôlée par le contributeur ;
 - validation explicite avant partage ;
 - possibilité de garder la conversation complète non publique ;
@@ -77,7 +79,7 @@ La migration `006` ne doit pas être exécutée isolément ou automatiquement.
 - les mécanismes de ratification ne sont pas finalisés ;
 - la fédération n’est pas encore authentifiée cryptographiquement ;
 - les conditions de retrait ou de correction après fédération ne sont pas définies ;
-- l’interface masque actuellement certaines explications sur les petits écrans ;
+- l’interface de compréhension synthétise les documents sources et peut devenir incohérente si elle n’est pas maintenue avec eux ;
 - la continuité administrative et financière dépend encore de l’initiateur ;
 - aucune licence de réutilisation n’a encore été ratifiée ;
 - l’archive complète des conversations est en cours de récupération ;

@@ -39,6 +39,7 @@
     <a
       class="brand"
       href="#home"
+      data-nav="home"
     >
       Coexistence des intelligences
     </a>
@@ -57,28 +58,14 @@
         data-nav="understand"
         class="nav"
       >
-        Comprendre
+        Explorer
       </button>
 
       <button
-        data-nav="disagreements"
+        data-nav="project"
         class="nav"
       >
-        Désaccords
-      </button>
-
-      <button
-        data-nav="evolution"
-        class="nav"
-      >
-        Évolution
-      </button>
-
-      <button
-        data-nav="journal"
-        class="nav"
-      >
-        Journal
+        Le projet
       </button>
 
     </nav>
@@ -88,6 +75,42 @@
 
 
   <main>
+
+    <nav
+      id="explore-nav"
+      class="section-nav shell hidden"
+      aria-label="Rubriques du corpus public"
+    >
+
+      <button
+        data-nav="understand"
+        class="section-nav-button"
+      >
+        Vue d’ensemble
+      </button>
+
+      <button
+        data-nav="disagreements"
+        class="section-nav-button"
+      >
+        Désaccords
+      </button>
+
+      <button
+        data-nav="evolution"
+        class="section-nav-button"
+      >
+        Évolution
+      </button>
+
+      <button
+        data-nav="journal"
+        class="section-nav-button"
+      >
+        Journal
+      </button>
+
+    </nav>
 
 
     <!-- =========================================================
@@ -102,7 +125,7 @@
       <div class="hero shell">
 
         <div class="eyebrow">
-          UN PROJET COLLECTIF · AUCUNE LECTURE PRÉALABLE
+          PARLER LIBREMENT · AUCUNE LECTURE PRÉALABLE
         </div>
 
 
@@ -117,6 +140,22 @@
           être amélioré.
           Parlez comme vous parleriez normalement.
         </p>
+
+
+        <div class="hero-actions">
+
+          <button
+            class="btn secondary"
+            data-nav="project"
+          >
+            Comprendre le projet
+          </button>
+
+          <span class="hint">
+            L’essentiel en deux minutes, les détails si vous le souhaitez.
+          </span>
+
+        </div>
 
 
         <div class="trust-grid">
@@ -151,7 +190,7 @@
           <div>
 
             <strong>
-              Rien n’est partagé sans vous.
+              Rien n’est publié sans validation.
             </strong>
 
             <span>
@@ -182,6 +221,7 @@
             <textarea
               id="message"
               rows="2"
+              aria-label="Votre message"
               placeholder="Écrivez simplement ce que vous souhaitez dire…"
             ></textarea>
 
@@ -239,7 +279,7 @@
         <aside class="card side-note">
 
           <h2>
-            Comment ça fonctionne&nbsp;?
+            Trois étapes suffisent
           </h2>
 
 
@@ -250,41 +290,29 @@
             </li>
 
             <li>
-              L’IA cherche d’abord à comprendre.
+              L’IA propose une synthèse que vous pouvez corriger.
             </li>
 
             <li>
-              Vous pouvez lui demander une synthèse.
-            </li>
-
-            <li>
-              Vous la corrigez si nécessaire.
-            </li>
-
-            <li>
-              Vous choisissez de la partager ou non.
-            </li>
-
-            <li>
-              Si vous la partagez, elle rejoint le corpus
-              et peut être mise en relation avec d’autres contributions.
+              Vous choisissez de la publier ou de ne rien partager.
             </li>
 
           </ol>
 
 
           <p class="hint">
-            L’IA peut proposer des interprétations,
-            des rapprochements ou des contre-arguments.
-            Ceux-ci restent contestables.
+            La conversation complète n’est pas enregistrée dans le corpus
+            par défaut. Vous pouvez choisir séparément de la transmettre
+            au système ; elle n’est pas affichée dans la contribution publique.
           </p>
 
 
-          <p class="hint">
-            Une critique radicale du projet est une contribution possible.
-            Le système doit protéger son fonctionnement,
-            pas défendre ses propres idées.
-          </p>
+          <button
+            class="link-btn"
+            data-nav="project"
+          >
+            Voir le fonctionnement et les garde-fous
+          </button>
 
         </aside>
 
@@ -302,7 +330,7 @@
       >
 
         <div class="eyebrow">
-          PROPOSITION DE SYNTHÈSE · NON PARTAGÉE
+          PROPOSITION DE SYNTHÈSE · NON PUBLIÉE
         </div>
 
 
@@ -375,7 +403,7 @@
 
           <span>
             J’ai relu cette synthèse et je souhaite
-            la partager comme contribution.
+            la rendre publique comme contribution.
           </span>
 
         </label>
@@ -391,7 +419,7 @@
           <span>
             Je souhaite aussi transmettre la conversation complète
             <em>
-              (facultatif, décoché par défaut)
+              (facultatif, non affichée publiquement et décoché par défaut)
             </em>.
           </span>
 
@@ -404,7 +432,7 @@
             id="publish"
             class="btn primary"
           >
-            Valider ma contribution
+            Publier ma contribution
           </button>
 
 
@@ -438,7 +466,592 @@
 
 
     <!-- =========================================================
-         COMPRENDRE
+         LE PROJET — COMPRÉHENSION PROGRESSIVE
+    ========================================================== -->
+
+    <section
+      id="view-project"
+      class="view shell project-view"
+    >
+
+      <div class="section-head project-head">
+
+        <div>
+
+          <div class="eyebrow">
+            COMPRENDRE À VOTRE RYTHME
+          </div>
+
+          <h1>
+            Le projet, du plus simple au plus complet
+          </h1>
+
+        </div>
+
+      </div>
+
+
+      <p class="lead small-lead">
+        Commencez par l’essentiel, puis choisissez librement
+        jusqu’où vous souhaitez approfondir.
+        Les niveaux s’ajoutent sans remplacer les précédents.
+      </p>
+
+
+      <section class="card depth-control" aria-labelledby="depth-title">
+
+        <div class="depth-control-head">
+
+          <div>
+
+            <div class="eyebrow">
+              PROFONDEUR CHOISIE
+            </div>
+
+            <h2 id="depth-title">
+              <span id="depth-number">Niveau 1</span>
+              —
+              <span id="depth-name">L’essentiel</span>
+            </h2>
+
+          </div>
+
+          <span class="status-badge">
+            Proposition non ratifiée
+          </span>
+
+        </div>
+
+
+        <label class="depth-label" for="comprehension-depth">
+          Choisir le niveau de détail
+        </label>
+
+
+        <input
+          id="comprehension-depth"
+          class="depth-range"
+          type="range"
+          min="1"
+          max="4"
+          step="1"
+          value="1"
+          aria-describedby="depth-help"
+        >
+
+
+        <div class="depth-steps" aria-hidden="true">
+          <span>1 · Essentiel</span>
+          <span>2 · Fonctionnement</span>
+          <span>3 · Garde-fous</span>
+          <span>4 · Sources</span>
+        </div>
+
+
+        <div class="depth-buttons" aria-label="Accès direct à un niveau">
+
+          <button type="button" data-depth-select="1" aria-pressed="true">
+            1
+            <span>Essentiel</span>
+          </button>
+
+          <button type="button" data-depth-select="2" aria-pressed="false">
+            2
+            <span>Fonctionnement</span>
+          </button>
+
+          <button type="button" data-depth-select="3" aria-pressed="false">
+            3
+            <span>Garde-fous</span>
+          </button>
+
+          <button type="button" data-depth-select="4" aria-pressed="false">
+            4
+            <span>Sources</span>
+          </button>
+
+        </div>
+
+
+        <p id="depth-help" class="hint">
+          Le niveau 1 se lit en environ deux minutes.
+          Le niveau 4 donne accès à l’état réel, aux contradictions,
+          aux décisions et aux documents sources.
+        </p>
+
+      </section>
+
+
+      <div
+        id="depth-announcement"
+        class="sr-only"
+        aria-live="polite"
+      ></div>
+
+
+      <section class="depth-section" data-depth="1">
+
+        <div class="depth-heading">
+          <span>1</span>
+          <div>
+            <div class="eyebrow">L’ESSENTIEL</div>
+            <h2>Pourquoi ce projet existe</h2>
+          </div>
+        </div>
+
+
+        <div class="project-grid two">
+
+          <article class="card project-card">
+
+            <h3>Créer de meilleures conditions pour se comprendre</h3>
+
+            <p>
+              Coexistence des intelligences accueille des expériences,
+              des inquiétudes, des idées, des questions et des désaccords.
+              L’objectif n’est pas de conduire tout le monde vers la même
+              opinion, mais de mieux comprendre ce qui nous relie ou nous sépare.
+            </p>
+
+            <p>
+              L’IA aide à écouter, reformuler, relier et confronter les idées.
+              Elle ne décide pas de ce que le projet doit penser.
+            </p>
+
+          </article>
+
+
+          <article class="card project-card">
+
+            <h3>Vous gardez le contrôle de votre parole</h3>
+
+            <ul class="plain-list">
+              <li>Vous n’avez rien à lire avant de parler.</li>
+              <li>Vous relisez et corrigez la synthèse proposée.</li>
+              <li>Rien n’est publié sans validation explicite.</li>
+              <li>Un désaccord ou une critique du projet reste légitime.</li>
+              <li>Vous pouvez ne rien partager et quitter librement.</li>
+            </ul>
+
+          </article>
+
+        </div>
+
+
+        <div class="boundary-grid">
+
+          <article>
+            <strong>Ce n’est pas un vote</strong>
+            <span>Une répétition de contributions n’est pas une majorité de personnes.</span>
+          </article>
+
+          <article>
+            <strong>Ce n’est pas une doctrine</strong>
+            <span>Les fondations elles-mêmes peuvent être critiquées et révisées.</span>
+          </article>
+
+          <article>
+            <strong>L’IA n’est pas l’autorité finale</strong>
+            <span>Ses synthèses, analyses et contre-arguments restent contestables.</span>
+          </article>
+
+        </div>
+
+
+        <div class="faq-list">
+
+          <details>
+            <summary>Dois-je être d’accord avec le projet pour contribuer&nbsp;?</summary>
+            <p>
+              Non. Une objection, une inquiétude ou une contestation radicale
+              peut aider le projet à comprendre ses propres limites.
+            </p>
+          </details>
+
+          <details>
+            <summary>Est-ce que l’IA parle en mon nom&nbsp;?</summary>
+            <p>
+              Non. Elle propose une synthèse que vous pouvez modifier ou refuser.
+              Ses analyses ultérieures doivent rester distinctes de votre parole.
+            </p>
+          </details>
+
+          <details>
+            <summary>Puis-je participer sans être exposé publiquement&nbsp;?</summary>
+            <p>
+              Aujourd’hui, vous pouvez discuter puis ne rien publier.
+              Si vous publiez une contribution, la conversation complète reste
+              exclue par défaut. Une véritable contribution privée est une
+              fonction future, pas une possibilité déjà active.
+            </p>
+          </details>
+
+        </div>
+
+      </section>
+
+
+      <section class="depth-section" data-depth="2" hidden>
+
+        <div class="depth-heading">
+          <span>2</span>
+          <div>
+            <div class="eyebrow">LE FONCTIONNEMENT</div>
+            <h2>Du dialogue au corpus public</h2>
+          </div>
+        </div>
+
+
+        <ol class="journey">
+
+          <li>
+            <strong>Parler</strong>
+            <span>Vous vous exprimez avec vos propres mots.</span>
+          </li>
+
+          <li>
+            <strong>Clarifier</strong>
+            <span>L’IA pose des questions courtes pour mieux comprendre.</span>
+          </li>
+
+          <li>
+            <strong>Relire</strong>
+            <span>Vous corrigez ou refusez la synthèse proposée.</span>
+          </li>
+
+          <li>
+            <strong>Choisir</strong>
+            <span>Vous publiez la synthèse ou ne partagez rien.</span>
+          </li>
+
+          <li>
+            <strong>Analyser et relier</strong>
+            <span>Elle est analysée avant publication, puis reliée au corpus.</span>
+          </li>
+
+        </ol>
+
+
+        <div class="project-grid three">
+
+          <article class="card project-card">
+            <div class="eyebrow">SOURCE</div>
+            <h3>Votre conversation</h3>
+            <p>
+              Elle contient vos formulations originales.
+              Elle n’est transmise avec la contribution que si vous cochez
+              volontairement l’option correspondante.
+            </p>
+          </article>
+
+          <article class="card project-card">
+            <div class="eyebrow">VALIDATION HUMAINE</div>
+            <h3>Votre contribution</h3>
+            <p>
+              C’est la synthèse que vous avez relue et choisi de publier.
+              Elle ne doit pas être confondue avec les interprétations ultérieures.
+            </p>
+          </article>
+
+          <article class="card project-card">
+            <div class="eyebrow">INTERPRÉTATION</div>
+            <h3>L’analyse de l’IA</h3>
+            <p>
+              Elle classe, relie et propose des contre-arguments.
+              Elle peut se tromper et doit rester identifiable comme analyse.
+            </p>
+          </article>
+
+        </div>
+
+
+        <aside class="card current-limit">
+          <strong>Limite actuelle importante</strong>
+          <p>
+            Le système ne permet pas encore d’enregistrer une contribution
+            privée utilisable par un corpus privé. Le choix disponible est
+            actuellement : publier la contribution après validation, ou ne rien
+            publier. Cette limite reste visible pour éviter de promettre un
+            contrôle qui n’est pas encore techniquement disponible.
+          </p>
+        </aside>
+
+      </section>
+
+
+      <section class="depth-section" data-depth="3" hidden>
+
+        <div class="depth-heading">
+          <span>3</span>
+          <div>
+            <div class="eyebrow">LES GARDE-FOUS</div>
+            <h2>Rendre l’influence et les contradictions visibles</h2>
+          </div>
+        </div>
+
+
+        <div class="guardrail-grid">
+
+          <article>
+            <strong>Validation explicite</strong>
+            <span>Aucune conversation ne devient une contribution sans choix humain.</span>
+          </article>
+
+          <article>
+            <strong>Source distincte de l’analyse</strong>
+            <span>La parole publiée et l’interprétation de l’IA restent séparées.</span>
+          </article>
+
+          <article>
+            <strong>Désaccord non fabriqué</strong>
+            <span>Un contre-argument de l’IA ne devient pas une position du corpus.</span>
+          </article>
+
+          <article>
+            <strong>Fréquence sans fausse majorité</strong>
+            <span>Le système compte des textes, pas des personnes distinctes.</span>
+          </article>
+
+          <article>
+            <strong>Évolution non automatique</strong>
+            <span>Une analyse peut signaler ou proposer, jamais adopter seule une règle.</span>
+          </article>
+
+          <article>
+            <strong>Pouvoir contestable</strong>
+            <span>L’initiateur, une majorité, une institution ou une IA ne décident pas seuls.</span>
+          </article>
+
+        </div>
+
+
+        <h3 class="subheading">Contradictions que le projet choisit de montrer</h3>
+
+
+        <div class="faq-list contradictions-list">
+
+          <details>
+            <summary>Simplicité de l’interface / profondeur réelle</summary>
+            <p>
+              Une interface simple peut accueillir davantage de personnes,
+              mais aussi masquer des choix importants. La réponse provisoire
+              consiste à montrer peu par défaut tout en laissant la totalité
+              des explications accessible volontairement.
+            </p>
+          </details>
+
+          <details>
+            <summary>Mémoire complète / évolution de la pensée</summary>
+            <p>
+              La traçabilité ne doit pas figer une personne dans une parole
+              ancienne. Une position doit pouvoir être précisée, corrigée,
+              remplacée ou retirée du corpus actif sans effacer son contexte.
+            </p>
+          </details>
+
+          <details>
+            <summary>Ouvrir rapidement / consolider avant de transmettre</summary>
+            <p>
+              Le projet veut laisser de la place aux contributions, mais poursuit
+              sa consolidation pour devenir compréhensible et transmissible.
+              Cette tension reste ouverte afin que la préparation ne devienne
+              pas une manière de déterminer seul tout l’essentiel.
+            </p>
+          </details>
+
+          <details>
+            <summary>Retrait de l’initiateur / continuité du projet</summary>
+            <p>
+              L’initiateur souhaite rester disponible aussi longtemps que nécessaire,
+              sans devenir indispensable ni disposer d’une autorité supérieure.
+              La transmission doit donc être progressive et testable.
+            </p>
+          </details>
+
+          <details>
+            <summary>Fédération / contrôle après copie</summary>
+            <p>
+              Une contribution partagée avec une autre instance devient une copie.
+              Une correction ou une dépublication à l’origine ne modifie pas encore
+              automatiquement les copies reçues ailleurs. Les règles de propagation
+              et de retrait restent à concevoir.
+            </p>
+          </details>
+
+        </div>
+
+
+        <div class="project-grid two human-ai">
+
+          <article class="card project-card">
+            <h3>Ce que l’humain conserve</h3>
+            <p>
+              L’expérience vécue, l’intention, les valeurs, le consentement
+              et la responsabilité des décisions.
+            </p>
+          </article>
+
+          <article class="card project-card">
+            <h3>Ce que l’IA peut apporter</h3>
+            <p>
+              La structuration, la continuité documentaire, la recherche
+              d’incohérences, les rapprochements et les contre-arguments.
+            </p>
+          </article>
+
+        </div>
+
+        <p class="hint">
+          Cette complémentarité ne suppose ni une symétrie parfaite des capacités,
+          ni que le statut moral ou l’expérience subjective d’une IA soient résolus.
+        </p>
+
+      </section>
+
+
+      <section class="depth-section" data-depth="4" hidden>
+
+        <div class="depth-heading">
+          <span>4</span>
+          <div>
+            <div class="eyebrow">LES SOURCES</div>
+            <h2>État réel, décisions et transmission</h2>
+          </div>
+        </div>
+
+
+        <div class="state-columns">
+
+          <article class="card state-card active-state">
+            <div class="eyebrow">PRÉSENT</div>
+            <h3>Infrastructure initiale</h3>
+            <p>
+              Conversation, synthèse relue, publication validée, analyses,
+              corpus public, désaccords, propositions, journal et première
+              fédération en lecture seule.
+            </p>
+          </article>
+
+          <article class="card state-card prepared-state">
+            <div class="eyebrow">PRÉPARÉ · NON ACTIVÉ</div>
+            <h3>Protocole d’analyse 0.4</h3>
+            <p>
+              Provenance épistémique, positions de désaccord traçables,
+              séparation mono/multi-contributions et signaux structurels.
+              La migration 006 n’est pas exécutée.
+            </p>
+          </article>
+
+          <article class="card state-card future-state">
+            <div class="eyebrow">FUTUR · NON PRÉSENT</div>
+            <h3>Fonctions encore envisagées</h3>
+            <p>
+              Contribution privée, délibération humaine, ratification,
+              Evolution Engine proposal-only, autodiagnostic, interopérabilité,
+              bifurcations liées et profil épistémique sans pondération des personnes.
+            </p>
+          </article>
+
+        </div>
+
+
+        <section class="card source-card">
+
+          <div class="source-card-head">
+            <div>
+              <div class="eyebrow">DOCUMENTATION VIVANTE</div>
+              <h3>Comprendre, vérifier et reprendre le projet</h3>
+            </div>
+            <span class="status-badge">Mise à jour · 2 septembre 2026</span>
+          </div>
+
+          <p>
+            Cette page est une porte d’entrée. Les documents sources conservent
+            davantage de contexte et doivent évoluer avec l’outil.
+          </p>
+
+          <div class="source-links">
+
+            <a href="https://github.com/coexistence-des-intelligences/Coexistence/blob/main/docs/understanding/START_HERE.md" target="_blank" rel="noreferrer">
+              <strong>Commencer ici</strong>
+              <span>Finalité et lecture en deux minutes</span>
+            </a>
+
+            <a href="https://github.com/coexistence-des-intelligences/Coexistence/blob/main/docs/understanding/PROJECT_STATE.md" target="_blank" rel="noreferrer">
+              <strong>État actuel</strong>
+              <span>Présent, préparé, futur et limites</span>
+            </a>
+
+            <a href="https://github.com/coexistence-des-intelligences/Coexistence/blob/main/docs/understanding/PHILOSOPHY_AND_METHOD.md" target="_blank" rel="noreferrer">
+              <strong>Philosophie et méthode</strong>
+              <span>Finalité, pouvoirs et coopération humain–IA</span>
+            </a>
+
+            <a href="https://github.com/coexistence-des-intelligences/Coexistence/blob/main/docs/understanding/CONTRADICTIONS_AND_OPEN_QUESTIONS.md" target="_blank" rel="noreferrer">
+              <strong>Contradictions ouvertes</strong>
+              <span>Tensions conservées sans cohérence artificielle</span>
+            </a>
+
+            <a href="https://github.com/coexistence-des-intelligences/Coexistence/blob/main/docs/understanding/DECISION_LOG.md" target="_blank" rel="noreferrer">
+              <strong>Journal des décisions</strong>
+              <span>Décisions, objections, statuts et révisions</span>
+            </a>
+
+            <a href="https://github.com/coexistence-des-intelligences/Coexistence/blob/main/docs/understanding/HANDOVER.md" target="_blank" rel="noreferrer">
+              <strong>Guide de transmission</strong>
+              <span>Continuer sans dépendre de l’initiateur</span>
+            </a>
+
+            <a href="https://github.com/coexistence-des-intelligences/Coexistence/blob/main/docs/understanding/GLOSSARY.md" target="_blank" rel="noreferrer">
+              <strong>Glossaire</strong>
+              <span>Vocabulaire commun et distinctions utiles</span>
+            </a>
+
+            <a href="https://github.com/coexistence-des-intelligences/Coexistence/blob/main/docs/understanding/CONVERSATION_ARCHIVE_INDEX.md" target="_blank" rel="noreferrer">
+              <strong>Index des conversations</strong>
+              <span>Structure de la mémoire et sources à venir</span>
+            </a>
+
+          </div>
+
+        </section>
+
+
+        <div class="project-grid two">
+
+          <article class="card project-card">
+            <h3>Documents techniques</h3>
+            <p>
+              Architecture, sécurité, opérations, fédération, déploiement,
+              sortie de l’initiateur et choix de licence restent accessibles
+              dans le dépôt complet.
+            </p>
+            <a class="btn ghost inline-button" href="https://github.com/coexistence-des-intelligences/Coexistence/tree/main/docs" target="_blank" rel="noreferrer">
+              Ouvrir les documents techniques
+            </a>
+          </article>
+
+          <article class="card project-card">
+            <h3>Code et historique</h3>
+            <p>
+              Les branches, commits, migrations et pull requests permettent
+              de vérifier comment le projet a réellement évolué.
+            </p>
+            <a class="btn ghost inline-button" href="https://github.com/coexistence-des-intelligences/Coexistence" target="_blank" rel="noreferrer">
+              Examiner le dépôt GitHub
+            </a>
+          </article>
+
+        </div>
+
+      </section>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         EXPLORER LE CORPUS
     ========================================================== -->
 
     <section
@@ -471,21 +1084,20 @@
 
 
       <p class="lead small-lead">
-        Le corpus ne prétend pas dire ce que « tout le monde pense ».
-        Il permet d’observer des contributions,
-        des pistes, des tensions et des questions
-        à mesure qu’elles apparaissent.
+        Explorez les contributions publiées et les relations que l’analyse
+        propose entre elles.
       </p>
 
 
-      <p class="hint">
-        Les contributions sont anonymes.
-        Le système peut compter des contributions,
-        mais il ne sait pas actuellement combien de personnes
-        distinctes en sont à l’origine.
-        Une pluralité de contributions n’est donc pas automatiquement
-        une pluralité de contributeurs.
-      </p>
+      <details class="method-note">
+        <summary>Comprendre les limites de cette vue</summary>
+        <p>
+          Le corpus ne prétend pas dire ce que « tout le monde pense ».
+          Les contributions sont anonymes et le système ne sait pas combien
+          de personnes distinctes en sont à l’origine. Il compte des textes,
+          pas une population, une majorité ou un vote.
+        </p>
+      </details>
 
 
       <div
@@ -505,10 +1117,7 @@
 
 
           <p class="hint">
-            Ces thèmes servent à relier les contributions.
-            Leur présence ne signifie pas qu’ils constituent
-            une conclusion du projet ni qu’ils représentent
-            une fréquence parmi des personnes distinctes.
+            Un thème relie des textes. Il n’est ni une vérité ni un vote.
           </p>
 
 
@@ -525,19 +1134,15 @@
           </h2>
 
 
-          <p class="hint">
-            Une synthèse inter-contributions cherche à rendre visibles
-            les convergences, divergences et tensions entre plusieurs
-            éléments du corpus.
-            Elle reste une interprétation contestable.
-          </p>
-
-
-          <p class="hint">
-            Plusieurs contributions peuvent provenir d’une même personne.
-            Cette synthèse ne doit donc pas être interprétée
-            comme un sondage, un vote ou une représentation sociale.
-          </p>
+          <details class="method-note compact">
+            <summary>Ce que cette synthèse ne prouve pas</summary>
+            <p>
+              Elle propose une lecture contestable de plusieurs textes.
+              Plusieurs contributions peuvent provenir d’une même personne :
+              cette synthèse n’est ni un sondage, ni un vote, ni une
+              représentation sociale.
+            </p>
+          </details>
 
 
           <div id="latest-synthesis"></div>
@@ -556,10 +1161,7 @@
 
 
         <p class="hint">
-          Chaque contribution reste distincte de l’analyse
-          que l’IA peut ensuite en produire.
-          Deux contributions différentes ne constituent pas
-          une preuve qu’elles proviennent de deux personnes différentes.
+          La contribution publiée reste distincte de l’analyse produite par l’IA.
         </p>
 
 
@@ -606,19 +1208,20 @@
 
 
       <p class="lead small-lead">
-        Un désaccord apparaît lorsque plusieurs contributions
-        portent réellement des positions différentes ou en tension.
-        Un contre-argument produit par l’IA ne constitue pas
-        à lui seul une seconde position du corpus.
+        Consultez les positions différentes réellement repérées
+        dans les contributions publiées.
       </p>
 
 
-      <p class="hint">
-        Ces désaccords décrivent des relations entre des contributions
-        ou des positions exprimées.
-        Ils ne prouvent pas que plusieurs personnes distinctes
-        sont en désaccord.
-      </p>
+      <details class="method-note">
+        <summary>Quand peut-on parler de désaccord&nbsp;?</summary>
+        <p>
+          Il faut plusieurs positions effectivement exprimées.
+          Un contre-argument produit par l’IA ne constitue pas une seconde
+          position du corpus. Ces relations entre textes ne prouvent pas non
+          plus que plusieurs personnes distinctes sont en désaccord.
+        </p>
+      </details>
 
 
       <div
@@ -665,18 +1268,19 @@
 
 
       <p class="lead small-lead">
-        Une proposition n’est jamais une décision automatique.
-        Elle doit rester reliée aux contributions qui l’ont fait émerger,
-        pouvoir rencontrer ses objections
-        et conserver les alternatives raisonnables.
+        Examinez des propositions, des risques et des questions
+        sans les confondre avec des décisions.
       </p>
 
 
-      <p class="hint">
-        La répétition d’une proposition dans plusieurs contributions
-        ne constitue ni une majorité, ni un vote,
-        ni une preuve qu’elle est portée par plusieurs personnes distinctes.
-      </p>
+      <details class="method-note">
+        <summary>Pourquoi une proposition n’est-elle pas une décision&nbsp;?</summary>
+        <p>
+          Elle doit rester reliée à ses sources, rencontrer ses objections
+          et conserver les alternatives raisonnables. Sa répétition ne constitue
+          ni une majorité, ni un vote, ni la preuve de plusieurs personnes distinctes.
+        </p>
+      </details>
 
 
       <div
@@ -769,18 +1373,19 @@
 
 
       <p class="lead small-lead">
-        Les transformations significatives du projet
-        doivent pouvoir laisser une trace :
-        publication, évolution méthodologique,
-        synthèse inter-contributions ou incident important.
+        Suivez les transformations significatives rendues publiques
+        par cette instance.
       </p>
 
 
-      <p class="hint">
-        Les détails techniques susceptibles de faciliter
-        une attaque ou d’exposer des informations sensibles
-        ne sont pas publiés.
-      </p>
+      <details class="method-note">
+        <summary>Que montre le journal public&nbsp;?</summary>
+        <p>
+          Il conserve les traces utiles des publications, évolutions
+          méthodologiques, synthèses ou incidents importants. Les secrets,
+          données personnelles et détails facilitant une attaque restent exclus.
+        </p>
+      </details>
 
 
       <div
@@ -830,27 +1435,15 @@
   <footer class="footer shell">
 
     <p>
-
-      <strong>
-        Coexistence des intelligences
-      </strong>
-
-      — phase initiale ouverte.
-
+      <strong>Coexistence des intelligences</strong>
+      — projet collectif en phase initiale.
+      Ses règles restent contestables et non ratifiées collectivement.
     </p>
 
 
-    <p>
-      Certaines règles actuelles sont provisoires
-      et n’ont pas encore été ratifiées collectivement.
-    </p>
-
-
-    <p>
-      Ni l’initiateur, ni une majorité,
-      ni une intelligence artificielle
-      ne constituent une autorité morale finale.
-    </p>
+    <button class="link-btn" data-nav="project">
+      Comprendre ses principes, ses limites et son état réel
+    </button>
 
   </footer>
 

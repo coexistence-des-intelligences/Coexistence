@@ -5,6 +5,8 @@ Première instance technique d’un projet à vocation collective, destinée à 
 ## Ce que fait cette V0.1
 
 - conversation sans lecture préalable ;
+- page publique de compréhension progressive, de l’essentiel aux sources ;
+- navigation simplifiée entre parole, exploration du corpus et compréhension du projet ;
 - synthèse contrôlée par le contributeur ;
 - aucune publication sans validation explicite ;
 - conservation facultative de la conversation complète ;
