@@ -150,6 +150,12 @@ assert.match(
   'Les explications essentielles ne doivent plus disparaître sur mobile.'
 );
 
+assert.match(
+  css,
+  /@media\(max-width:620px\)[\s\S]*?\.trust-grid\{display:flex;overflow-x:auto;scroll-snap-type:x proximity/,
+  'Les garanties doivent rester accessibles sans repousser la conversation sur mobile.'
+);
+
 for (const externalLink of html.matchAll(
   /<a\b[^>]*target="_blank"[^>]*>/g
 )) {
