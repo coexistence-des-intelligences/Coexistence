@@ -64,7 +64,7 @@ Il peut continuer à soutenir ou contribuer sans autorité supérieure ni droit 
 
 **Motif :** empêcher l’IA d’inventer une pluralité absente du corpus.
 
-**Statut :** préparé et testé, non déployé.
+**Statut :** règle techniquement active, testée, provisoire et non ratifiée.
 
 ## D-007 — Séparer observation, proposition et décision
 
@@ -81,7 +81,7 @@ Elle peut produire des signaux structurels. Un futur Evolution Engine pourra les
 5. ratification ;
 6. nouvelle version.
 
-**Statut :** séparation préparée ; moteur et ratification non développés.
+**Statut :** séparation active dans le protocole 0.4 ; Evolution Engine et ratification non développés.
 
 ## D-008 — Pause dans l’expansion fonctionnelle
 
@@ -99,7 +99,7 @@ Elle peut produire des signaux structurels. Un futur Evolution Engine pourra les
 
 **Garde-fou :** ne pas hiérarchiser les personnes selon la profondeur choisie.
 
-**Statut :** approuvé en principe, non intégré.
+**Statut :** intégré dans l’interface publique ; principe non ratifié collectivement.
 
 ## D-010 — Transmission du cheminement complet
 

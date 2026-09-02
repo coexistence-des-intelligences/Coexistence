@@ -8,7 +8,7 @@ Créer un système où une contribution validée devient matière collective san
 
 ### Boucle intellectuelle
 
-`parler → comprendre → valider → publier → analyser → relier → contredire → synthétiser → proposer → être contesté`
+`parler → comprendre → valider → publier → analyser → relier → contredire → synthétiser → signaler → être contesté`
 
 ### Boucle d'intégrité
 
@@ -35,12 +35,19 @@ Aucune contribution ne peut directement exécuter du code, modifier un prompt sy
 Toutes les 6 heures, uniquement s'il existe assez de matière :
 
 - lecture d'un échantillon récent d'analyses publiques ;
-- recherche de convergences et divergences ;
-- mise à jour des désaccords, risques et questions ;
-- propositions possibles ;
-- candidat de version possible.
+- séparation des thèmes réellement multi-contributions et des observations isolées ;
+- conservation des désaccords uniquement lorsque chaque position est explicitement ancrée ;
+- conservation séparée des oppositions inférées comme tensions analytiques ;
+- mise à jour des risques, questions et propositions explicitement présents dans le corpus ;
+- production possible de signaux structurels non décisionnels.
 
-Un candidat de version reste une `proposal` ouverte. Aucun code ne l'adopte automatiquement.
+Le moteur de synthèse ne produit plus de candidat de version. Les signaux structurels pourront servir d'entrées à un futur Evolution Engine distinct, sans adoption ni modification automatique du projet.
+
+## Provenance épistémique
+
+Le protocole d'analyse 0.4 distingue ce qui est explicitement présent dans une contribution, ce qui est inféré par l'IA et ce qui est construit comme contre-argument. Un objet inféré peut rester visible dans la synthèse, mais il n'est pas promu comme position, risque, question ou proposition exprimée par le corpus.
+
+Les analyses et synthèses enregistrent également leur version de protocole, leur fournisseur et leur modèle. Le fournisseur actif reste OpenAI ; toute autre valeur est refusée tant qu'un adaptateur explicite n'a pas été implémenté, afin d'éviter une provenance technique trompeuse.
 
 ## Données
 
@@ -51,5 +58,5 @@ La base n'est jamais directement exposée au navigateur dans V0.1. Toutes les le
 - interface : HTML/CSS/JS sans framework obligatoire ;
 - serveur : Worker JavaScript standard et appels HTTP ;
 - données : PostgreSQL + pgvector ;
-- IA : appels HTTP isolés dans `src/openai.js` afin de pouvoir remplacer le fournisseur ;
+- IA : appels HTTP isolés dans `src/openai.js`, avec provenance fournisseur/modèle et refus explicite des fournisseurs non encore adaptés ;
 - protocoles/documents : fichiers publics dans Git.
