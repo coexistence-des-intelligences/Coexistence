@@ -38,6 +38,26 @@ Si l'interface web refuse un dossier imbriqué, utiliser GitHub Desktop : ajoute
 
 Il crée les tables du corpus, les index vectoriels, le journal, le rate-limit et les fonctions nécessaires.
 
+### Instance déjà initialisée
+
+Sur une instance existante, ne rejouez pas `001_init.sql`. Appliquez les migrations numérotées manquantes dans l'ordre, une seule fois, après sauvegarde de la base et vérification de la branche de code correspondante.
+
+La migration `database/006_analysis_protocol_0_4.sql` doit rester en attente tant que le bloc 0.4 n'a pas été validé et explicitement approuvé.
+
+Le Worker 0.4 lit des colonnes créées par `006`. Si `main` déclenche automatiquement un déploiement Cloudflare, ne fusionnez donc pas le code 0.4 avant la migration.
+
+Lorsqu'elle sera autorisée, l'ordre sûr sera :
+
+1. vérifier une sauvegarde récupérable de la base ;
+2. exécuter uniquement `006` dans Supabase ;
+3. contrôler les colonnes, contraintes, index et la table `structural_signals` ;
+4. fusionner le code 0.4 compatible dans `main` ;
+5. attendre le déploiement Cloudflare réussi ;
+6. contrôler les routes publiques, une analyse de test et le journal ;
+7. en cas d'échec du Worker, redéployer temporairement le commit logiciel précédent : la migration reste compatible avec l'ancien Worker.
+
+Une migration de base ne doit jamais être lancée automatiquement par le Worker. Un aperçu de branche utilisant la base réelle ne doit pas recevoir de contribution tant que `006` n'est pas appliquée.
+
 ### Vérification
 
 Dans **Table Editor**, vous devez notamment voir :

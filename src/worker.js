@@ -73,16 +73,16 @@ async function handleContribution(request, env, ctx) {
 async function overview(env) {
   const [contributions, themes, disagreements, risks, questions, proposals] = await Promise.all([
     countRows(env, 'contributions', 'status=eq.published'),
-    countRows(env, 'themes'),
+    countRows(env, 'themes', 'description_source_synthesis_id=not.is.null'),
     countRows(env, 'disagreements', 'status=eq.open'),
     countRows(env, 'risks', 'status=eq.open'),
     countRows(env, 'questions', 'status=eq.open'),
     countRows(env, 'proposals', 'status=eq.open')
   ]);
   const [recentThemes, recentEvents, synthesis] = await Promise.all([
-    sb(env, 'themes?select=canonical_key,label,description,updated_at&order=updated_at.desc&limit=8'),
+    sb(env, 'themes?select=canonical_key,label,description,description_protocol_version,description_provider,description_model,updated_at&description_source_synthesis_id=not.is.null&order=updated_at.desc&limit=8'),
     sb(env, 'events?visibility=eq.public&select=public_id,event_type,public_summary,created_at&order=created_at.desc&limit=8'),
-    sb(env, 'collective_syntheses?select=public_id,content,created_at&order=created_at.desc&limit=1')
+    sb(env, 'collective_syntheses?select=public_id,protocol_version,provider,model,content,analysis_provenance,created_at&order=created_at.desc&limit=1')
   ]);
   return { counts: { contributions, themes, disagreements, risks, questions, proposals }, recent_themes: recentThemes || [], recent_events: recentEvents || [], latest_synthesis: synthesis?.[0] || null };
 }
@@ -95,7 +95,7 @@ async function contributionDetail(env, id) {
   const rows = await sb(env, `contributions?public_id=eq.${encodeURIComponent(id)}&status=eq.published&select=id,public_id,title,summary,nature,open_question,created_at&limit=1`);
   const c = rows?.[0];
   if (!c) return null;
-  const analyses = await sb(env, `analyses?contribution_id=eq.${c.id}&status=eq.active&select=public_id,model,protocol_version,content,created_at&order=created_at.desc&limit=5`);
+  const analyses = await sb(env, `analyses?contribution_id=eq.${c.id}&status=eq.active&select=public_id,provider,model,protocol_version,content,created_at&order=created_at.desc&limit=5`);
   delete c.id;
   return { contribution: c, analyses: analyses || [] };
 }
@@ -128,10 +128,10 @@ async function route(request, env, ctx) {
     const detail = await contributionDetail(env, id);
     return detail ? json(detail) : json({ error: 'Introuvable ou non public.' }, 404);
   }
-  if (request.method === 'GET' && p === '/api/public/disagreements') return json(await publicList(env, 'disagreements', 'public_id,title,summary,positions,evidence_ids,status,updated_at', 'status=eq.open&order=updated_at.desc&limit=50'));
-  if (request.method === 'GET' && p === '/api/public/risks') return json(await publicList(env, 'risks', 'public_id,title,summary,evidence_ids,status,updated_at', 'status=eq.open&order=updated_at.desc&limit=50'));
-  if (request.method === 'GET' && p === '/api/public/questions') return json(await publicList(env, 'questions', 'public_id,question,evidence_ids,status,updated_at', 'status=eq.open&order=updated_at.desc&limit=50'));
-  if (request.method === 'GET' && p === '/api/public/proposals') return json(await publicList(env, 'proposals', 'public_id,proposal_type,title,summary,counterargument,evidence_ids,payload,status,source,updated_at', 'status=eq.open&order=updated_at.desc&limit=50'));
+  if (request.method === 'GET' && p === '/api/public/disagreements') return json(await publicList(env, 'disagreements', 'public_id,title,summary,positions,position_provenance,evidence_ids,origin_protocol_version,origin_provider,origin_model,status,updated_at', 'status=eq.open&order=updated_at.desc&limit=50'));
+  if (request.method === 'GET' && p === '/api/public/risks') return json(await publicList(env, 'risks', 'public_id,title,summary,grounding,evidence_ids,origin_protocol_version,origin_provider,origin_model,status,updated_at', 'status=eq.open&order=updated_at.desc&limit=50'));
+  if (request.method === 'GET' && p === '/api/public/questions') return json(await publicList(env, 'questions', 'public_id,question,grounding,evidence_ids,origin_protocol_version,origin_provider,origin_model,status,updated_at', 'status=eq.open&order=updated_at.desc&limit=50'));
+  if (request.method === 'GET' && p === '/api/public/proposals') return json(await publicList(env, 'proposals', 'public_id,proposal_type,title,summary,counterargument,grounding,evidence_ids,payload,origin_protocol_version,origin_provider,origin_model,status,source,updated_at', 'status=eq.open&order=updated_at.desc&limit=50'));
   if (request.method === 'GET' && p === '/api/public/events') return json(await publicList(env, 'events', 'public_id,event_type,public_summary,details,created_at', 'visibility=eq.public&order=created_at.desc&limit=100'));
   if (request.method === 'GET' && p === '/api/public/federation') return json(await publicList(env, 'federated_instances', 'instance_id,base_url,protocol_version,trust_status,last_seen_at', 'order=last_seen_at.desc&limit=50'));
 

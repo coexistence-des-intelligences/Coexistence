@@ -12,14 +12,16 @@ Première instance technique d’un projet à vocation collective, destinée à 
 - conservation facultative de la conversation complète ;
 - analyse structurée de chaque contribution ;
 - rapprochement sémantique avec le corpus existant ;
-- thèmes, tensions, relations, risques, questions et propositions ;
-- désaccords conservés au lieu d'être aplatis ;
+- provenance épistémique explicite pour les objets qui alimentent le corpus ;
+- séparation entre observations issues d'une contribution et thèmes réellement multi-contributions ;
+- désaccords conservés avec la provenance de chaque position ;
+- tensions inférées conservées sans être promues en désaccords du corpus ;
+- thèmes, relations, risques, questions et propositions traçables ;
 - tableau de bord public ;
 - journal public du travail institutionnel de l'IA ;
 - quarantaine en cas de risque de confidentialité ou d'intégrité ;
 - synthèse collective automatique toutes les 6 heures lorsqu'il y a assez de matière ;
-- candidats de version encore possibles dans le protocole actuellement actif, mais jamais adoptés automatiquement ;
-- leur remplacement par des signaux structurels non décisionnels est préparé dans le protocole 0.4, encore non déployé ;
+- signaux structurels non décisionnels pour un futur Evolution Engine ;
 - reprise automatique des traitements ayant échoué ;
 - premier protocole de fédération inter-instance en lecture seule ;
 - aucune clé secrète dans le navigateur.
@@ -40,6 +42,7 @@ Le projet distingue l’essentiel, son fonctionnement, ses fondations et ses sou
 - [Contradictions et questions ouvertes](docs/understanding/CONTRADICTIONS_AND_OPEN_QUESTIONS.md)
 - [Journal initial des décisions](docs/understanding/DECISION_LOG.md)
 - [Guide de transmission](docs/understanding/HANDOVER.md)
+- [Dossier de relecture extérieure du protocole 0.4](docs/understanding/PROTOCOL_0_4_EXTERNAL_REVIEW.md)
 - [Glossaire](docs/understanding/GLOSSARY.md)
 - [Index des conversations et sources](docs/understanding/CONVERSATION_ARCHIVE_INDEX.md)
 
@@ -64,6 +67,7 @@ Cloudflare Worker + Static Assets
    │      ├── thèmes / relations
    │      ├── désaccords / risques / questions
    │      ├── propositions
+   │      ├── signaux structurels
    │      └── journal public
    │
    └── traitement périodique
@@ -83,7 +87,7 @@ Avant toute nouvelle migration ou évolution structurelle :
 3. distinguer clairement ce qui est actif, proposé ou encore ouvert ;
 4. préparer la continuité du projet sans dépendance à son initiateur.
 
-Le protocole 0.4 reste préparé sur une branche distincte. La migration `006` ne doit pas être exécutée avant une décision explicite concernant son intégration et son déploiement.
+Le protocole d’analyse 0.4 est techniquement actif. Son activation a été conçue comme une opération coordonnée : sauvegarde vérifiée, migration `006`, fusion du code compatible, déploiement puis contrôles fonctionnels. Cette activation ne constitue pas une ratification collective : la méthode reste contestable et révisable.
 
 `DEPLOYMENT.md` reste le document de référence pour les opérations techniques autorisées.
 

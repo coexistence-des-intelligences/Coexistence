@@ -62,7 +62,7 @@ La simplicité est devant. La rigueur reste accessible derrière.
 
 ## Où en est le projet ?
 
-Une première infrastructure existe. Le protocole d’analyse 0.4 est préparé et vérifié, mais sa migration et son déploiement ne sont pas encore réalisés.
+Une première infrastructure existe. Le protocole d’analyse 0.4 est techniquement actif : il sépare les éléments explicites, les inférences de l’IA et ses contre-arguments, sans transformer cette règle provisoire en décision collectivement ratifiée.
 
 Le projet n’a pas encore fait l’objet d’une ratification collective. Certaines règles sont techniquement actives, d’autres sont expérimentales, proposées ou encore ouvertes.
 

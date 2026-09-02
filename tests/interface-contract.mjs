@@ -145,6 +145,12 @@ assert.match(
 );
 
 assert.match(
+  app,
+  /version_candidate:\s*'Candidat de version historique'/,
+  'Les anciens événements de version doivent rester lisibles sans sembler encore actifs.'
+);
+
+assert.match(
   css,
   /@media\(max-width:620px\)[\s\S]*?\.side-note\{display:block\}/,
   'Les explications essentielles ne doivent plus disparaître sur mobile.'

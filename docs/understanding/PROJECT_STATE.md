@@ -20,18 +20,23 @@ Ses principes n’ont pas encore été ratifiés par une communauté extérieure
 - possibilité de garder la conversation complète non publique ;
 - enregistrement des contributions publiées ;
 - analyse individuelle structurée ;
+- provenance épistémique selon le protocole d’analyse 0.4 ;
 - rapprochement avec le corpus ;
 - synthèse inter-contributions ;
+- séparation entre observations mono-contribution et thèmes multi-contributions ;
+- désaccords avec provenance propre à chaque position ;
+- tensions inférées conservées sans promotion comme désaccords du corpus ;
 - thèmes, désaccords, risques, questions et propositions ;
+- signaux structurels non décisionnels destinés à un futur Evolution Engine ;
 - journal public ;
 - mécanisme de quarantaine ;
 - traitement périodique ;
 - première base de fédération entre instances ;
 - documentation d’architecture, sécurité, exploitation et sortie de l’initiateur.
 
-## Préparé et vérifié, mais non activé
+## Techniquement actif, mais non ratifié
 
-Le protocole d’analyse 0.4 est préparé sur la branche `analysis-protocol-0.4`.
+Le protocole d’analyse 0.4 est appliqué par le moteur d’analyse.
 
 Il introduit notamment :
 
@@ -44,16 +49,15 @@ Il introduit notamment :
 - signaux structurels non décisionnels ;
 - provenance du fournisseur et du modèle d’IA.
 
-Les contrôles automatisés du contrat 0.4 passent dans la copie locale vérifiée.
+Les contrôles automatisés du contrat 0.4 et de l’interface passent. Cette activation technique reste une règle provisoire, contestable et révisable : elle ne constitue pas une ratification collective.
 
-## En attente
+## Prochaines vérifications
 
-- migration `database/006_analysis_protocol_0_4.sql` ;
-- merge du bloc 0.4 vers `main` ;
-- déploiement de la version compatible ;
-- vérification en conditions réelles après migration.
-
-La migration `006` ne doit pas être exécutée isolément ou automatiquement.
+- observer les premières analyses réellement produites sous 0.4 ;
+- vérifier que les faux désaccords sont bien rétrogradés en tensions ;
+- vérifier que les thèmes annoncés comme multi-contributions possèdent plusieurs sources distinctes ;
+- soumettre la méthode à une relecture extérieure ;
+- conserver la possibilité de réviser ou remplacer le protocole.
 
 ## Fonctions futures, non présentes
 

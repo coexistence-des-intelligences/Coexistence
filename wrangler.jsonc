@@ -21,19 +21,14 @@
 
   "vars": {
     "INSTANCE_ID": "coexistence-origin-1",
-
     "INSTANCE_NAME": "Coexistence des intelligences — instance d'origine",
-
     "PROTOCOL_VERSION": "0.1",
-
-    "ANALYSIS_PROTOCOL_VERSION": "0.3",
-
+    "ANALYSIS_PROTOCOL_VERSION": "0.4",
+    "ANALYSIS_PROVIDER": "openai",
+    "ANALYSIS_MODEL": "gpt-5-mini",
     "OPENAI_CHAT_MODEL": "gpt-5-mini",
-
     "OPENAI_ANALYSIS_MODEL": "gpt-5-mini",
-
     "OPENAI_EMBEDDING_MODEL": "text-embedding-3-small",
-
     "PUBLIC_BASE_URL": "https://coexistence.coexistencedesintelligences.workers.dev"
   }
 }

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "check": "node --check src/worker.js && node --check src/openai.js && node --check src/supabase.js && node --check src/security.js && node --check src/collective.js && node --check public/app.js && node tests/interface-contract.mjs && node tests/interface-runtime.mjs",
+    "check": "node --check src/worker.js && node --check src/openai.js && node --check src/supabase.js && node --check src/security.js && node --check src/prompts.js && node --check src/schemas.js && node --check src/collective.js && node --check public/app.js && node tests/protocol-0.4-contract.mjs && node tests/interface-contract.mjs && node tests/interface-runtime.mjs",
     "smoke": "node tests/smoke-test.mjs"
   },
   "devDependencies": {
