@@ -42,6 +42,7 @@ Le projet distingue l’essentiel, son fonctionnement, ses fondations et ses sou
 - [Contradictions et questions ouvertes](docs/understanding/CONTRADICTIONS_AND_OPEN_QUESTIONS.md)
 - [Journal initial des décisions](docs/understanding/DECISION_LOG.md)
 - [Guide de transmission](docs/understanding/HANDOVER.md)
+- [Dossier de relecture extérieure du protocole 0.4](docs/understanding/PROTOCOL_0_4_EXTERNAL_REVIEW.md)
 - [Glossaire](docs/understanding/GLOSSARY.md)
 - [Index des conversations et sources](docs/understanding/CONVERSATION_ARCHIVE_INDEX.md)
 

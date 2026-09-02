@@ -146,3 +146,17 @@ Avec un consentement adapté, elles peuvent traiter une matière contributive co
 - filiation historique préservée.
 
 **Statut :** proposition future, non conçue techniquement.
+
+## D-013 — Relecture extérieure avant activation du protocole 0.4
+
+**Décision de travail :** ne pas exécuter la migration 006 ni fusionner le protocole 0.4 avant la relecture du bloc par le premier dépositaire proposé.
+
+**Liberté du relecteur :** ce rôle dépend de son accord libre et explicite. Il peut le refuser, l’interrompre ou différer sa réponse sans justification.
+
+**Choix possibles :** recommander une activation technique provisoire, demander des corrections, différer ou déconseiller l’activation.
+
+**Limite :** cet avis teste la compréhensibilité, la transmission et la capacité de contradiction. Il ne représente pas une communauté et ne constitue pas une autorité permanente.
+
+**Garde-fou :** le choix de conserver ou publier l’avis reste distinct de la décision concernant le protocole.
+
+**Statut :** point d’arrêt actif pour la pull request n° 3 ; relecture non commencée.

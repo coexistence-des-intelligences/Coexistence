@@ -81,6 +81,21 @@ La transmission est réussie si une personne extérieure peut :
 - savoir où chercher une information ;
 - comprendre comment le projet continue sans l’initiateur.
 
+## Première mise en pratique proposée
+
+Le protocole d’analyse 0.4 constitue le premier bloc soumis à cette relecture extérieure avant son activation technique.
+
+Le [dossier de relecture du protocole 0.4](PROTOCOL_0_4_EXTERNAL_REVIEW.md) doit permettre au premier dépositaire proposé :
+
+- d’accepter ou de refuser librement le rôle ;
+- de comprendre le bloc sans explication technique préalable ;
+- de distinguer activation provisoire et ratification collective ;
+- d’identifier les limites et contradictions connues ;
+- de demander des corrections, différer ou déconseiller l’activation ;
+- de choisir séparément la conservation et la visibilité de son avis.
+
+Tant que cette étape n’est pas terminée, la migration 006 et la fusion du protocole 0.4 restent suspendues.
+
 ## Maintenir la compréhension publique
 
 L’interface « Le projet » est une porte d’entrée progressive vers cette documentation. Elle ne doit pas devenir une présentation figée ou promotionnelle séparée de l’état réel.

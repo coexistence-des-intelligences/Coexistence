@@ -33,6 +33,18 @@ const decisionLog =
     'utf8'
   );
 
+const readme =
+  readFileSync(new URL('../README.md', import.meta.url), 'utf8');
+
+const externalReview =
+  readFileSync(
+    new URL(
+      '../docs/understanding/PROTOCOL_0_4_EXTERNAL_REVIEW.md',
+      import.meta.url
+    ),
+    'utf8'
+  );
+
 assert.equal(
   Object.prototype.hasOwnProperty.call(collectiveSchema.properties, 'version_candidate'),
   false,
@@ -176,6 +188,36 @@ assert.match(
   /D-009[\s\S]*?intégré dans l’interface publique/,
   'Le journal des décisions doit refléter l’intégration de la compréhension progressive.'
 );
+
+assert.match(
+  decisionLog,
+  /D-013[\s\S]*?migration 006[\s\S]*?fusionner le protocole 0\.4/,
+  'Le journal doit conserver le point d’arrêt de relecture extérieure.'
+);
+
+assert.match(
+  readme,
+  /PROTOCOL_0_4_EXTERNAL_REVIEW\.md/,
+  'Le dossier de relecture extérieure doit rester accessible depuis le README.'
+);
+
+for (const requiredReviewRule of [
+  /accepter ou refuser ce rôle/,
+  /activation technique provisoire/,
+  /ratification collective/,
+  /demande des corrections/,
+  /recommande de différer/,
+  /ne recommande pas son activation/,
+  /choix concernant la conservation et la visibilité/i,
+  /Migration 006 : non exécutée/,
+  /Fusion dans `main` : non effectuée/
+]) {
+  assert.match(
+    externalReview,
+    requiredReviewRule,
+    `Le dossier de relecture doit conserver la règle : ${requiredReviewRule}`
+  );
+}
 
 assert.match(
   COLLECTIVE_PROMPT,
